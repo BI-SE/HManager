@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wjq.mapper.ActiveMapper" >
+  <resultMap id="BaseResultMap" type="com.wjq.model.Active" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ACTIVE_ID" property="activeId" jdbcType="VARCHAR" />
+    <result column="ACTIVE_NAME" property="activeName" jdbcType="VARCHAR" />
+    <result column="ACTIVE_TYPE" property="activeType" jdbcType="VARCHAR" />
+    <result column="ACTIVE_PRICE" property="activePrice" jdbcType="DECIMAL" />
+    <result column="ACTIVE_START_DATE" property="activeStartDate" jdbcType="TIMESTAMP" />
+    <result column="ACTIVE_END_DATE" property="activeEndDate" jdbcType="TIMESTAMP" />
+    <result column="GMT_CREATE" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="GMT_MODIFIED" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ACTIVE_ID, ACTIVE_NAME, ACTIVE_TYPE, ACTIVE_PRICE, ACTIVE_START_DATE, ACTIVE_END_DATE, 
+    GMT_CREATE, GMT_MODIFIED, MEMO
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from active
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from active
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wjq.model.Active" >
+    insert into active (ID, ACTIVE_ID, ACTIVE_NAME, 
+      ACTIVE_TYPE, ACTIVE_PRICE, ACTIVE_START_DATE, 
+      ACTIVE_END_DATE, GMT_CREATE, GMT_MODIFIED, 
+      MEMO)
+    values (#{id,jdbcType=BIGINT}, #{activeId,jdbcType=VARCHAR}, #{activeName,jdbcType=VARCHAR}, 
+      #{activeType,jdbcType=VARCHAR}, #{activePrice,jdbcType=DECIMAL}, #{activeStartDate,jdbcType=TIMESTAMP}, 
+      #{activeEndDate,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wjq.model.Active" >
+    insert into active
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="activeId != null" >
+        ACTIVE_ID,
+      </if>
+      <if test="activeName != null" >
+        ACTIVE_NAME,
+      </if>
+      <if test="activeType != null" >
+        ACTIVE_TYPE,
+      </if>
+      <if test="activePrice != null" >
+        ACTIVE_PRICE,
+      </if>
+      <if test="activeStartDate != null" >
+        ACTIVE_START_DATE,
+      </if>
+      <if test="activeEndDate != null" >
+        ACTIVE_END_DATE,
+      </if>
+      <if test="gmtCreate != null" >
+        GMT_CREATE,
+      </if>
+      <if test="gmtModified != null" >
+        GMT_MODIFIED,
+      </if>
+      <if test="memo != null" >
+        MEMO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="activeId != null" >
+        #{activeId,jdbcType=VARCHAR},
+      </if>
+      <if test="activeName != null" >
+        #{activeName,jdbcType=VARCHAR},
+      </if>
+      <if test="activeType != null" >
+        #{activeType,jdbcType=VARCHAR},
+      </if>
+      <if test="activePrice != null" >
+        #{activePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activeStartDate != null" >
+        #{activeStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeEndDate != null" >
+        #{activeEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wjq.model.Active" >
+    update active
+    <set >
+      <if test="activeId != null" >
+        ACTIVE_ID = #{activeId,jdbcType=VARCHAR},
+      </if>
+      <if test="activeName != null" >
+        ACTIVE_NAME = #{activeName,jdbcType=VARCHAR},
+      </if>
+      <if test="activeType != null" >
+        ACTIVE_TYPE = #{activeType,jdbcType=VARCHAR},
+      </if>
+      <if test="activePrice != null" >
+        ACTIVE_PRICE = #{activePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activeStartDate != null" >
+        ACTIVE_START_DATE = #{activeStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeEndDate != null" >
+        ACTIVE_END_DATE = #{activeEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null" >
+        GMT_CREATE = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        GMT_MODIFIED = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memo != null" >
+        MEMO = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wjq.model.Active" >
+    update active
+    set ACTIVE_ID = #{activeId,jdbcType=VARCHAR},
+      ACTIVE_NAME = #{activeName,jdbcType=VARCHAR},
+      ACTIVE_TYPE = #{activeType,jdbcType=VARCHAR},
+      ACTIVE_PRICE = #{activePrice,jdbcType=DECIMAL},
+      ACTIVE_START_DATE = #{activeStartDate,jdbcType=TIMESTAMP},
+      ACTIVE_END_DATE = #{activeEndDate,jdbcType=TIMESTAMP},
+      GMT_CREATE = #{gmtCreate,jdbcType=TIMESTAMP},
+      GMT_MODIFIED = #{gmtModified,jdbcType=TIMESTAMP},
+      MEMO = #{memo,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
