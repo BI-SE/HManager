@@ -161,4 +161,45 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+    <update id="updateByRoomId" parameterType="java.lang.String" >
+    update room
+    set
+      STATUS = '1'
+    where ROOM_ID = #{roomId}
+  </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+      SELECT
+        room.ID,
+        room.ROOM_ID,
+        room.ROOM_NAME,
+        room.ROOM_TYPE,
+        room.PRICE,
+        room.IS_ACTIVE,
+        room.ACTIVE_ID,
+        room.STATUS,
+        room.GMT_CREATE,
+        room.GMT_MODIFIED,
+        room.MEMO
+      FROM
+        room where  room.STATUS = '0'
+  </select>
+
+    <select id="selectByRoomId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+            room.ID,
+            room.ROOM_ID,
+            room.ROOM_NAME,
+            room.ROOM_TYPE,
+            room.PRICE,
+            room.IS_ACTIVE,
+            room.ACTIVE_ID,
+            room.STATUS,
+            room.GMT_CREATE,
+            room.GMT_MODIFIED,
+            room.MEMO
+        from room
+        where ROOM_ID = #{roomId}
+    </select>
 </mapper>

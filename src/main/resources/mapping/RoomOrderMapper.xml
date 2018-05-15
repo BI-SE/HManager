@@ -150,4 +150,10 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <update id="updateStatusByRoomId" parameterType="java.lang.String">
+    update room_order
+    set STATUS = '1'
+    where ROOM_ID = #{roomId,jdbcType=VARCHAR} and  STATUS = '0'
+  </update>
 </mapper>

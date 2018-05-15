@@ -138,4 +138,20 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="selectByCertNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+      ID,
+      USER_ID,
+      NAME,
+      SEX,
+      CERT_NO,
+      CELL,
+      GMT_CREATE,
+      GMT_MODIFIED,
+      MEMO
+    FROM
+     user where CERT_NO =#{certNo}
+  </select>
+  
 </mapper>

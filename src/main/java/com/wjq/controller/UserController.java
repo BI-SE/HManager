@@ -1,6 +1,7 @@
 package com.wjq.controller;
 
 import com.wjq.mapper.ManagerMapper;
+import com.wjq.mapper.RoomMapper;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,22 +25,26 @@ public class UserController {
     @Autowired
     private ManagerMapper managerMapper;
 
+    @Autowired
+    private RoomMapper roomMapper;
+
+    @ApiOperation(value = "进入登录页面",notes = "")
+    @RequestMapping(value = "/login.htm",method =RequestMethod.GET)
+    public String login(Model model){
+        return "/login";
+    }
+
     @ApiOperation(value = "登录" ,notes = "")
     @ApiImplicitParam(name = "manager",value = "用户实体对象",required =true,dataType = "Manager")
-    @RequestMapping(value ="/login.htm",method = RequestMethod.GET)
-    public String login(@ModelAttribute Manager manager, Model model){
+    @RequestMapping(value ="/index.htm",method = RequestMethod.GET)
+    public String index(@ModelAttribute Manager manager, Model model){
 
-        Manager manager1 =  managerMapper.selectByPrimaryKey(1);
+        List roomList = roomMapper.selectAll();
 
-        model.addAttribute("hello","Hello, Spring Boodfgft!");
-        model.addAttribute("manager1",manager1);
+        model.addAttribute("roomList",roomList);
 
 
-        return "/user/list2";
+        return "/index";
     }
 
-
-    public void setManagerMapper(ManagerMapper managerMapper) {
-        this.managerMapper = managerMapper;
-    }
 }

@@ -1,8 +1,9 @@
 package com.wjq.mapper;
 
 import com.wjq.model.User;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
+@Component("userMapper")
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -11,6 +12,8 @@ public interface UserMapper {
     int insertSelective(User record);
 
     User selectByPrimaryKey(Long id);
+
+    User selectByCertNo(String certNo);
 
     int updateByPrimaryKeySelective(User record);
 
