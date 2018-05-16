@@ -169,7 +169,7 @@
     where ROOM_ID = #{roomId}
   </update>
 
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.String">
       SELECT
         room.ID,
         room.ROOM_ID,
@@ -183,7 +183,12 @@
         room.GMT_MODIFIED,
         room.MEMO
       FROM
-        room where  room.STATUS = '0'
+        room
+        <where>
+          <if test="status !=null and status !=''">
+            room.STATUS = #{status}
+          </if>
+        </where>
   </select>
 
     <select id="selectByRoomId" resultMap="BaseResultMap" parameterType="java.lang.String">

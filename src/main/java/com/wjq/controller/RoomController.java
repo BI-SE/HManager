@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 房间控制类
@@ -87,6 +88,17 @@ public class RoomController {
         }
 
         return "success";
+    }
+
+    @ApiOperation(value = "房间列表",notes = "")
+    @RequestMapping(value = "roomList.htm")
+    public String roomList(Model model){
+
+       List rooms = roomMapper.selectAll(null);
+
+        model.addAttribute("rooms",rooms);
+
+        return "/room";
     }
 
 }

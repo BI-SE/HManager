@@ -39,7 +39,7 @@ public class UserController {
     @RequestMapping(value ="/index.htm",method = RequestMethod.GET)
     public String index(@ModelAttribute Manager manager, Model model){
 
-        List roomList = roomMapper.selectAll();
+        List roomList = roomMapper.selectAll("0");
 
         model.addAttribute("roomList",roomList);
 

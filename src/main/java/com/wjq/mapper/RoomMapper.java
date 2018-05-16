@@ -1,6 +1,7 @@
 package com.wjq.mapper;
 
 import com.wjq.model.Room;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,5 +24,5 @@ public interface RoomMapper {
 
     int updateByRoomId(String roomId);
 
-    List selectAll();
+    List selectAll(@Param(value = "status") String status);
 }
