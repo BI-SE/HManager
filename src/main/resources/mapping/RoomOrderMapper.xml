@@ -156,4 +156,41 @@
     set STATUS = '1'
     where ROOM_ID = #{roomId,jdbcType=VARCHAR} and  STATUS = '0'
   </update>
+
+  <select id="selectAll" resultType="com.wjq.model.OrderResult">
+
+    SELECT
+      room_order.ID id,
+      room_order.ROOM_ID roomId,
+      room_order.USER_ID userId,
+      room_order.ORDER_NO orderNo,
+      room_order.ACTIVE_ID activeNo,
+      room_order.DEPOSIT_AMOUNT depositAmount,
+      room_order.STATUS status,
+      room_order.GMT_CREATE gmtCreate,
+      room_order.GMT_MODIFIED gmtModified,
+      room_order.MEMO memo,
+    userr.NAME name,
+    room.ROOM_NAME roomName
+    FROM
+      room_order left JOIN user userr ON  userr.USER_ID = room_order.USER_ID LEFT JOIN  room room ON  room.ROOM_ID = room_order.ROOM_ID
+
+    WHERE 1= 1
+
+    <if test="userName != null and userName != ''">
+      userr.NAME = #{userName}
+    </if>
+
+    <if test="roomName != null and roomName != ''">
+      room.ROOM_NAME = #{roomName}
+    </if>
+
+  </select>
+
+  <update id="updateStatusByOrderNo">
+    update room_order
+    SET  STATUS = #{status}
+    WHERE  ORDER_NO = #{orderNo}
+  </update>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.wjq.controller;
 
 import com.wjq.mapper.ManagerMapper;
 import com.wjq.mapper.RoomMapper;
+import com.wjq.mapper.UserMapper;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -28,6 +30,9 @@ public class UserController {
     @Autowired
     private RoomMapper roomMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @ApiOperation(value = "进入登录页面",notes = "")
     @RequestMapping(value = "/login.htm",method =RequestMethod.GET)
     public String login(Model model){
@@ -39,12 +44,31 @@ public class UserController {
     @RequestMapping(value ="/index.htm",method = RequestMethod.GET)
     public String index(@ModelAttribute Manager manager, Model model){
 
-        List roomList = roomMapper.selectAll("0");
+        List roomList = roomMapper.selectAll("0",null,null);
 
         model.addAttribute("roomList",roomList);
 
 
         return "/index";
     }
+
+    @ApiOperation(value = "用户列表" ,notes = "")
+    @RequestMapping(value ="/userList.htm",method = RequestMethod.GET)
+    public String userList(HttpServletRequest request, Model model){
+
+        String userName = request.getParameter("userName");
+        String cell = request.getParameter("cell");
+        String certNo = request.getParameter("certNo");
+
+       List userList = userMapper.selectList(userName,cell,certNo);
+
+        model.addAttribute("userList",userList);
+
+
+        return "/user";
+    }
+
+
+
 
 }

@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> ModularAdmin - Free Dashboard Theme | HTML Version </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="stylesheet" href="../css/vendor.css">
+    <!-- Theme initialization -->
+    <script>
+        var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
+            {};
+        var themeName = themeSettings.themeName || '';
+        if (themeName)
+        {
+            document.write('<link rel="stylesheet" id="theme-style" href="../css/app-' + themeName + '.css">');
+        }
+        else
+        {
+            document.write('<link rel="stylesheet" id="theme-style" href="../css/app.css">');
+        }
+    </script>
+    <script src="../js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="col-md-6">
+    <div class="card card-block sameheight-item">
+        <div class="title-block">
+            <h3 class="title"> 新增房间 </h3>
+        </div>
+        <form role="form" id="form1">
+            <div class="form-group">
+                <label class="control-label">房间名</label>
+                <input name="roomName" type="text" class="form-control underlined"> </div>
+            <div class="form-group">
+                <label class="control-label">房间类型</label>
+                <input name="roomType" type="text" class="form-control underlined"> </div>
+            <div class="form-group">
+                <label class="control-label">价格</label>
+                <input name="price" type="text" class="form-control underlined"> </div>
+            <button type="button" class="btn btn-primary-outline" onclick="addRoom()">继续</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function addRoom(){
+
+        jQuery.ajax({
+            dataType:'text',
+            type:'post',
+            async:false,
+            url:"../room/addRoom.do",
+            data:$('#form1').serialize(),
+            success:function(data){
+                alert(data);
+                window.opener.location.href = window.opener.location.href;
+                window.close();
+            },
+
+            error : function(data) {
+                alert(data);
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

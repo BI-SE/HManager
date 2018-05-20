@@ -1,7 +1,10 @@
 package com.wjq.mapper;
 
 import com.wjq.model.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component("userMapper")
 public interface UserMapper {
@@ -18,4 +21,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List selectList(@Param(value = "userName") String userName,@Param(value = "cell") String cell,@Param(value = "certNo") String certNo);
 }

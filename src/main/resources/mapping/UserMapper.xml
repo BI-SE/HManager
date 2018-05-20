@@ -153,5 +153,33 @@
     FROM
      user where CERT_NO =#{certNo}
   </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+
+    SELECT
+      ID,
+      USER_ID,
+      NAME,
+      SEX,
+      CERT_NO,
+      CELL,
+      GMT_CREATE,
+      GMT_MODIFIED,
+      MEMO
+    FROM
+     user where 1=1
+
+    <if test="userName != null and userName != ''" >
+      NAME = #{userName},
+    </if>
+    <if test="cell != null and cell != ''" >
+      CELL = #{cell},
+    </if>
+
+    <if test="certNo != null and certNo != ''" >
+      CERT_NO = #{certNo},
+    </if>
+
+  </select>
   
 </mapper>

@@ -183,11 +183,20 @@
         room.GMT_MODIFIED,
         room.MEMO
       FROM
-        room
+        room room
         <where>
           <if test="status !=null and status !=''">
             room.STATUS = #{status}
           </if>
+
+          <if test="roomType !=null and roomType !=''">
+            and  room.ROOM_TYPE = #{roomType}
+          </if>
+
+          <if test="roomName !=null and roomName !=''">
+            and  room.ROOM_NAME = #{roomName}
+          </if>
+
         </where>
   </select>
 
@@ -207,4 +216,11 @@
         from room
         where ROOM_ID = #{roomId}
     </select>
+
+  <update id="updateStateByRoomId" >
+
+    UPDATE room
+    SET  STATUS = #{status}
+    WHERE  ROOM_ID = #{roomId}
+  </update>
 </mapper>

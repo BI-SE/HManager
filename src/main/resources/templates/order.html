@@ -130,14 +130,14 @@
                                 <i class="fa fa-home"></i> 首页 </a>
                         </li>
                     </ul>
-                     <ul class="sidebar-menu metismenu" id="sidebar-menu">
-                                <li class="active">
-                                    <a href="../room/roomList.htm">
-                                        <i class="fa fa-home"></i> 房间 </a>
-                                </li>
-                    </ul>
                     <ul class="sidebar-menu metismenu" id="sidebar-menu">
                         <li>
+                            <a href="../room/roomList.htm">
+                                <i class="fa fa-home"></i> 房间 </a>
+                        </li>
+                    </ul>
+                    <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li class="active">
                             <a href="../order/orderList.htm">
                                 <i class="fa fa-home"></i> 订单 </a>
                         </li>
@@ -253,17 +253,17 @@
         <article class="content dashboard-page">
             <div class="col-md-12">
                 <form action="..//room/roomList.htm" method="post">
-                <div class="form-group"  style="float:left;margin-right:20px">
-                    <label class="control-label">房间名</label>
-                <input name="roomName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
-                 <div class="form-group"  style="float:left;margin-right:20px">
-                    <label class="control-label">房间类型</label>
-                <input name="roomType" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
-                <div class="form-group"  >
-                    <label class="control-label">房间状态</label>
-                    <input name="status" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
-                <button type="submit" class="btn btn-primary-outline">搜索</button>
-                <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
+                    <div class="form-group"  style="float:left;margin-right:20px">
+                        <label class="control-label">房间名</label>
+                        <input name="roomName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
+                    <div class="form-group"  style="float:left;margin-right:20px">
+                        <label class="control-label">房间类型</label>
+                        <input name="roomType" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
+                    <div class="form-group"  >
+                        <label class="control-label">房间状态</label>
+                        <input name="status" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
+                    <button type="submit" class="btn btn-primary-outline">搜索</button>
+                    <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
                 </form>
                 <div class="card">
                     <div class="card-block">
@@ -275,12 +275,10 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>房间id</th>
+                                    <th>订单id</th>
                                     <th>房间名</th>
-                                    <th>房间类型</th>
-                                    <th>房间基础价格</th>
-                                    <th>是否参与活动</th>
-                                    <th>房间状态</th>
+                                    <th>用户名</th>
+                                    <th>订单价格</th>
                                     <th>创建时间</th>
                                     <th>修改时间</th>
                                     <th>备注</th>
@@ -288,18 +286,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="room,roomStat: ${rooms}">
-                                    <th th:text="${roomStat.index+1}" scope="row">1</th>
-                                    <td th:text="${room.roomId}">111</td>
-                                    <td th:text="${room.roomName}">11</td>
-                                    <td th:text="${room.roomType}">11</td>
-                                    <td th:text="${room.price}">11</td>
-                                    <td th:text="${room.isActive}">11</td>
-                                    <td th:text="${room.status}">11</td>[
-                                    <td th:text="${#dates.format(room.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${#dates.format(room.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${room.memo}">11</td>
-                                    <td><button th:if="${room.status} == '1'" type="button" class="btn btn-primary-outline" th:onclick="'javascript:tf('+${room.roomId}+');'">退房</button></td>
+                                <tr th:each="order,orderStat: ${orderList}">
+                                    <th th:text="${orderStat.index+1}" scope="row">1</th>
+                                    <td th:text="${order.orderNo}">111</td>
+                                    <td th:text="${order.roomName}">11</td>
+                                    <td th:text="${order.name}">11</td>
+                                    <td th:text="${order.depositAmount}">11</td>
+                                    <td th:text="${#dates.format(order.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${#dates.format(order.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${order.memo}">11</td>
+                                    <td><button th:if="${order.status} == '1'" type="button" class="btn btn-primary-outline" th:onclick="'javascript:tf(\''+${order.orderNo}+'\',\''+${order.roomId}+'\');'">退房</button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -409,9 +405,9 @@
     {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function()
-        {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
+            {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
         a = s.createElement(o),
             m = s.getElementsByTagName(o)[0];
         a.async = 1;
@@ -427,9 +423,24 @@
         window.open('../room/editRoom.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
-    function tf(roomId) {
-
+    function tf(orderNo,roomId) {
+        jQuery.ajax({
+           dataType:"text",
+            type:"post",
+            url:"../order/quitRoom.do",
+            data:{
+                orderNo:orderNo,
+                roomId:roomId
+            },
+            success:function (data) {
+               window.location.reload();
+            },
+            error:function (data) {
+                alert(data);
+            }
+        });
     }
+
 
 </script>
 <script src="../js/vendor.js"></script>

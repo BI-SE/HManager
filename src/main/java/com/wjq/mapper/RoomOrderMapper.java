@@ -1,7 +1,10 @@
 package com.wjq.mapper;
 
 import com.wjq.model.RoomOrder;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component("roomOrderMapper")
 public interface RoomOrderMapper {
@@ -17,5 +20,9 @@ public interface RoomOrderMapper {
 
     int updateStatusByRoomId(String roomId);
 
+    int updateStatusByOrderNo(@Param(value = "orderNo") String orderNo,@Param(value = "status") String status);
+
     int updateByPrimaryKey(RoomOrder record);
+
+    List selectAll(@Param(value = "userName") String userName,@Param(value = "roomName") String roomName);
 }
