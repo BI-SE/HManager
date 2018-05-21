@@ -144,13 +144,13 @@
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li class="active">
+                        <li >
                             <a href="../user/userList.htm">
                                 <i class="fa fa-home"></i> 用户 </a>
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 1 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li >
+                        <li class="active">
                             <a href="../user/managerList.htm">
                                 <i class="fa fa-home"></i> 后台用户 </a>
                         </li>
@@ -260,46 +260,36 @@
         <article class="content dashboard-page">
             <div class="col-md-12">
                 <form action="../user/userList.htm" method="post">
-                    <div class="form-group"  style="float:left;margin-right:20px">
+                    <div class="form-group" >
                         <label class="control-label">用户名</label>
                         <input name="userName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
-                    <div class="form-group"  style="float:left;margin-right:20px">
-                        <label class="control-label">手机号</label>
-                        <input name="cell" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
-                    <div class="form-group"  >
-                        <label class="control-label">证件号</label>
-                        <input name="certNo" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
                     <button type="submit" class="btn btn-primary-outline">搜索</button>
                 </form>
                 <div class="card">
                     <div class="card-block">
                         <div class="card-title-block">
-                            <h3 class="title"> 用户列表 </h3>
+                            <h3 class="title"> 后台用户列表 </h3>
                         </div>
                         <section class="example">
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>用户id</th>
                                     <th>用户名</th>
-                                    <th>手机号</th>
-                                    <th>证件号</th>
+                                    <th>等级权限</th>
                                     <th>创建时间</th>
                                     <th>修改时间</th>
                                     <th>备注</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="user,userStat: ${userList}">
-                                    <th th:text="${userStat.index+1}" scope="row">1</th>
-                                    <td th:text="${user.userId}">111</td>
-                                    <td th:text="${user.name}">11</td>
-                                    <td th:text="${user.cell}">11</td>
-                                    <td th:text="${user.certNo}">11</td>
-                                    <td th:text="${#dates.format(user.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${#dates.format(user.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${user.memo}">11</td>
+                                <tr th:each="manager,managerStat: ${managerList}">
+                                    <th th:text="${managerStat.index+1}" scope="row">1</th>
+                                    <td th:text="${manager.userName}">11</td>
+                                    <td th:text="${manager.level}">11</td>
+                                    <td th:text="${#dates.format(manager.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${#dates.format(manager.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${manager.memo}">11</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -409,9 +399,9 @@
     {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function()
-            {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
+        {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
         a = s.createElement(o),
             m = s.getElementsByTagName(o)[0];
         a.async = 1;

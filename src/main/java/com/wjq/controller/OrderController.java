@@ -2,6 +2,7 @@ package com.wjq.controller;
 
 import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.RoomOrderMapper;
+import com.wjq.model.Manager;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,9 @@ public class OrderController {
 
         List orderList = roomOrderMapper.selectAll(userName,roomName);
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
         model.addAttribute("orderList",orderList);
         return  "/order";
     }
@@ -59,8 +63,6 @@ public class OrderController {
 
         roomMapper.updateStateByRoomId(roomId,"0");
         roomOrderMapper.updateStatusByOrderNo(orderNo,"2");
-
-
 
         return  "successr";
     }

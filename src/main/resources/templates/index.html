@@ -124,29 +124,35 @@
                                 </div> Modular Admin </div>
                         </div>
                         <nav class="menu">
-                            <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                            <ul th:if="${manager.level} le 5" class="sidebar-menu metismenu" id="sidebar-menu">
                                 <li class="active">
                                     <a href="../user/index.htm">
                                         <i class="fa fa-home"></i> 首页 </a>
                                 </li>
                             </ul>
-                            <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                            <ul  th:if="${manager.level} eq 4 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
                                 <li >
                                     <a href="../room/roomList.htm">
                                         <i class="fa fa-home"></i> 房间 </a>
                                 </li>
                             </ul>
 
-                            <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                            <ul th:if="${manager.level} eq 3 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
                                 <li>
                                     <a href="../order/orderList.htm">
                                         <i class="fa fa-home"></i> 订单 </a>
                                 </li>
                             </ul>
-                            <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                            <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
                                 <li>
                                     <a href="../user/userList.htm">
                                         <i class="fa fa-home"></i> 用户 </a>
+                                </li>
+                            </ul>
+                            <ul th:if="${manager.level} eq 1 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                                <li >
+                                    <a href="../user/managerList.htm">
+                                        <i class="fa fa-home"></i> 后台用户 </a>
                                 </li>
                             </ul>
                         </nav>

@@ -42,12 +42,35 @@ public class UserController {
     @ApiOperation(value = "登录" ,notes = "")
     @ApiImplicitParam(name = "manager",value = "用户实体对象",required =true,dataType = "Manager")
     @RequestMapping(value ="/index.htm",method = RequestMethod.GET)
-    public String index(@ModelAttribute Manager manager, Model model){
+    public String index(HttpServletRequest request,@ModelAttribute Manager manager, Model model){
+
+        Manager managerSession = (Manager) request.getSession().getAttribute("manager");
+
+
+        if(null==manager){
+            throw  new RuntimeException("请输入账号密码");
+        }
+
+        if(null==manager.getUserName()||"".equals(manager.getUserPassword())){
+            throw  new RuntimeException("请输入账号密码");
+        }
+
+     Manager managerDO =    managerMapper.selectByUserName(manager.getUserName());
+
+        if(null==managerDO){
+            throw new RuntimeException("用户不存在，请确认账号!");
+        }
+
+        if(!managerDO.getUserPassword().equals(manager.getUserPassword())){
+            throw  new RuntimeException("密码错误,请重新输入!");
+        }
 
         List roomList = roomMapper.selectAll("0",null,null);
 
         model.addAttribute("roomList",roomList);
+        model.addAttribute("manager",managerDO);
 
+        request.getSession().setAttribute("manager",managerDO);
 
         return "/index";
     }
@@ -61,14 +84,28 @@ public class UserController {
         String certNo = request.getParameter("certNo");
 
        List userList = userMapper.selectList(userName,cell,certNo);
+       Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
 
         model.addAttribute("userList",userList);
+
 
 
         return "/user";
     }
 
+    @ApiOperation(value = "进入后台管理用户",notes = "")
+    @RequestMapping(value = "/managerList.htm",method =RequestMethod.GET)
+    public String managerList(HttpServletRequest request,Model model){
 
+      List managerList =   managerMapper.selectAll(null);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+      model.addAttribute("managerList",managerList);
+
+        return "/manager";
+    }
 
 
 }

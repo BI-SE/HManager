@@ -3,6 +3,7 @@ package com.wjq.controller;
 import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.RoomOrderMapper;
 import com.wjq.mapper.UserMapper;
+import com.wjq.model.Manager;
 import com.wjq.model.Room;
 import com.wjq.model.RoomOrder;
 import com.wjq.model.User;
@@ -44,6 +45,9 @@ public class RoomController {
         String roomId = request.getParameter("roomId");
 
         Room room = roomMapper.selectByRoomId(roomId);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
 
         model.addAttribute("room", room);
         return "/signRoom";
@@ -101,6 +105,9 @@ public class RoomController {
         String status = request.getParameter("status");
 
         List rooms = roomMapper.selectAll(status, roomType, roomName);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
 
 
         model.addAttribute("rooms", rooms);

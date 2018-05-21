@@ -114,4 +114,34 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByUserName" resultMap="BaseResultMap">
+    SELECT
+      manager.ID,
+      manager.USER_NAME,
+      manager.USER_PASSWORD,
+      manager.`LEVEL`,
+      manager.GMT_CREATE,
+      manager.GMT_MODIFIED,
+      manager.MEMO
+    FROM
+      manager where USER_NAME = #{userName}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.wjq.model.Manager" >
+    SELECT
+      manager.ID,
+      manager.USER_NAME,
+      manager.USER_PASSWORD,
+      manager.`LEVEL`,
+      manager.GMT_CREATE,
+      manager.GMT_MODIFIED,
+      manager.MEMO
+    FROM
+      manager where 1 = 1
+      <if test="userName != null and userName !=''" >
+        manager.USER_NAME = #{userName}
+      </if>
+  </select>
+
 </mapper>

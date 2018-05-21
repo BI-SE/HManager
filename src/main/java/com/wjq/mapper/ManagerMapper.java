@@ -1,8 +1,9 @@
 package com.wjq.mapper;
 
 import com.wjq.model.Manager;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component(value = "managerMapper")
 public interface ManagerMapper {
@@ -17,4 +18,8 @@ public interface ManagerMapper {
     int updateByPrimaryKeySelective(Manager record);
 
     int updateByPrimaryKey(Manager record);
+
+    Manager selectByUserName(String userName);
+
+    List selectAll(Manager manager);
 }
