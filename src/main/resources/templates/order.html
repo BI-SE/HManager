@@ -155,6 +155,18 @@
                                 <i class="fa fa-home"></i> 后台用户 </a>
                         </li>
                     </ul>
+                    <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../active/activeList.htm">
+                                <i class="fa fa-home"></i> 活动 </a>
+                        </li>
+                    </ul>
+                    <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../consumable/consumableList.htm">
+                                <i class="fa fa-home"></i> 消耗品 </a>
+                        </li>
+                    </ul>
                 </nav>
             </div>
             <footer class="sidebar-footer">

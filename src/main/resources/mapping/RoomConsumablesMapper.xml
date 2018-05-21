@@ -125,4 +125,19 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectList" resultMap="BaseResultMap"parameterType="com.wjq.model.RoomConsumables">
+    SELECT
+      room_consumables.ID,
+      room_consumables.ROOM_ID,
+      room_consumables.NAME,
+      room_consumables.PRICE,
+      room_consumables.STATUS,
+      room_consumables.GMT_CREATE,
+      room_consumables.GMT_MODIFIED,
+      room_consumables.MEMO
+    FROM
+      room_consumables
+
+  </select>
 </mapper>

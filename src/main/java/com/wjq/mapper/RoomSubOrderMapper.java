@@ -1,7 +1,9 @@
 package com.wjq.mapper;
 
 import com.wjq.model.RoomSubOrder;
+import org.springframework.stereotype.Component;
 
+@Component("/roomSubOrderMapper")
 public interface RoomSubOrderMapper {
     int deleteByPrimaryKey(Long id);
 

@@ -24,6 +24,8 @@ public interface RoomMapper {
 
     int updateByRoomId(String roomId);
 
+    int updateActiveByRoomId(String roomId);
+
     int updateStateByRoomId(@Param(value = "roomId") String roomId,@Param(value = "status") String status);
 
     List selectAll(@Param(value = "status") String status,@Param(value = "roomType")

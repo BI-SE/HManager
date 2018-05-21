@@ -29,34 +29,34 @@
 <div class="col-md-6">
     <div class="card card-block sameheight-item">
         <div class="title-block">
-            <h3 class="title"> 新增房间 </h3>
+            <h3 class="title"> 新增消耗品 </h3>
         </div>
         <form role="form" id="form1">
             <div class="form-group">
-                <label class="control-label">房间名</label>
-                <input name="roomName" type="text" class="form-control underlined"> </div>
+                <label class="control-label">房间id</label>
+                <input name="roomId" type="text" class="form-control underlined"> </div>
             <div class="form-group">
-                <label class="control-label">房间类型</label>
-                <input name="roomType" type="text" class="form-control underlined"> </div>
+                <label class="control-label">名称</label>
+                <input name="name" type="text" class="form-control underlined"> </div>
             <div class="form-group">
                 <label class="control-label">价格</label>
                 <input name="price" type="text" class="form-control underlined"> </div>
             <div class="form-group">
-                <label class="control-label">活动</label>
-                <input name="activeId" type="text" class="form-control underlined"> </div>
-            <button type="button" class="btn btn-primary-outline" onclick="addRoom()">继续</button>
+                <label class="control-label">状态</label>
+                <input name="status" type="text" class="form-control underlined"> </div>
+            <button type="button" class="btn btn-primary-outline" onclick="addActive()">继续</button>
         </form>
     </div>
 </div>
 
 <script type="text/javascript">
-    function addRoom(){
+    function addActive(){
 
         jQuery.ajax({
             dataType:'text',
             type:'post',
             async:false,
-            url:"../room/addRoom.do",
+            url:"../consumable/addConsumable.do",
             data:$('#form1').serialize(),
             success:function(data){
                 alert(data);

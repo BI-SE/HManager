@@ -1,12 +1,7 @@
 package com.wjq.controller;
 
-import com.wjq.mapper.RoomMapper;
-import com.wjq.mapper.RoomOrderMapper;
-import com.wjq.mapper.UserMapper;
-import com.wjq.model.Manager;
-import com.wjq.model.Room;
-import com.wjq.model.RoomOrder;
-import com.wjq.model.User;
+import com.wjq.mapper.*;
+import com.wjq.model.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +34,12 @@ public class RoomController {
     @Autowired
     private RoomOrderMapper roomOrderMapper;
 
+    @Autowired
+    private RoomSubOrderMapper roomSubOrderMapper;
+
+    @Autowired
+    private ActiveMapper activeMapper;
+
     @ApiOperation(value = "登记页面", notes = "")
     @RequestMapping(value = "signRoom.htm", method = RequestMethod.GET)
     public String signRoom(HttpServletRequest request, Model model) {
@@ -50,6 +51,11 @@ public class RoomController {
         model.addAttribute("manager",managerDO);
 
         model.addAttribute("room", room);
+
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
         return "/signRoom";
     }
 
@@ -71,20 +77,37 @@ public class RoomController {
             userModel.setUserId(System.currentTimeMillis() + "");
             userMapper.insert(userModel);
         }
-
-        Room room = roomMapper.selectByRoomId(roomId);
-
         //插入订单
         RoomOrder roomOrder = new RoomOrder();
-        roomOrder.setActiveId("");
+        Room room = roomMapper.selectByRoomId(roomId);
+
+        if("1".equals(room.getIsActive())){
+            Active active =   activeMapper.selectByActiveId(room.getActiveId());
+            if(active.getActiveEndDate().getTime()>=System.currentTimeMillis()){
+                room.setPrice(active.getActivePrice());
+                roomOrder.setActiveId(active.getActiveId());
+            }
+        }
+
         roomOrder.setDepositAmount(room.getPrice());
         roomOrder.setGmtCreate(new Date());
         roomOrder.setGmtModified(new Date());
         roomOrder.setMemo("");
-        roomOrder.setOrderNo(System.currentTimeMillis() + "or");
+        roomOrder.setOrderNo( "or"+System.currentTimeMillis() );
         roomOrder.setStatus("1");
         roomOrder.setRoomId(roomId);
         roomOrder.setUserId(userModel.getUserId());
+
+        //插入子订单
+        RoomSubOrder roomSubOrder = new RoomSubOrder();
+        roomSubOrder.setAmount(room.getPrice());
+        roomSubOrder.setGmtCreate(new Date());
+        roomSubOrder.setGmtModified(new Date());
+        roomSubOrder.setOrderId(roomOrder.getOrderNo());
+        roomSubOrder.setPayStatus("0");
+        roomSubOrder.setSubOrderId("sub"+System.currentTimeMillis());
+        roomSubOrder.setType("0");
+        roomSubOrderMapper.insert(roomSubOrder);
 
         roomOrderMapper.insert(roomOrder);
 
@@ -104,7 +127,17 @@ public class RoomController {
         String roomType = request.getParameter("roomType");
         String status = request.getParameter("status");
 
-        List rooms = roomMapper.selectAll(status, roomType, roomName);
+        List<Room> rooms = roomMapper.selectAll(status, roomType, roomName);
+
+        for(Room room:rooms){
+            if("1".equals(room.getIsActive())){
+              Active active =   activeMapper.selectByActiveId(room.getActiveId());
+                room.setMemo(active.getActiveName());
+              if(active.getActiveEndDate().getTime()>=System.currentTimeMillis()){
+                  room.setPrice(active.getActivePrice());
+              }
+            }
+        }
 
         Manager managerDO = (Manager) request.getSession().getAttribute("manager");
         model.addAttribute("manager",managerDO);
@@ -114,6 +147,11 @@ public class RoomController {
         model.addAttribute("roomName", roomName);
         model.addAttribute("roomType", roomType);
         model.addAttribute("status", status);
+
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
 
         return "/room";
     }
@@ -136,6 +174,7 @@ public class RoomController {
         String roomName = request.getParameter("roomName");
         String roomType = request.getParameter("roomType");
         String price = request.getParameter("price");
+        String activeId = request.getParameter("activeId");
 
         if(roomName==null||"".equals(roomName)){
             throw new  RuntimeException("用户名不能为空");
@@ -157,7 +196,26 @@ public class RoomController {
         room.setGmtCreate(new Date());
         room.setGmtModified(new Date());
         room.setStatus("0");
+        room.setActiveId(activeId);
+        room.setIsActive("1");
         roomMapper.insert(room);
+
+        return "success";
+    }
+
+
+    @ApiOperation(value = "取消活动", notes = "")
+    @RequestMapping(value = "quitActive.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Object quitActive(HttpServletRequest request,Model model) {
+
+        String roomId = request.getParameter("roomId");
+
+        if(roomId==null||"".equals(roomId)){
+            throw new  RuntimeException("房间id不能为空");
+        }
+
+        roomMapper.updateActiveByRoomId(roomId);
 
         return "success";
     }

@@ -223,4 +223,12 @@
     SET  STATUS = #{status}
     WHERE  ROOM_ID = #{roomId}
   </update>
+
+  <update id="updateActiveByRoomId" >
+
+    UPDATE room
+    SET  IS_ACTIVE = "0"
+    WHERE  ROOM_ID = #{roomId}
+  </update>
+
 </mapper>

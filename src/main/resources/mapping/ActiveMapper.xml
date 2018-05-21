@@ -150,4 +150,45 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByActiveId" resultMap="BaseResultMap">
+    SELECT
+      active.ID,
+      active.ACTIVE_ID,
+      active.ACTIVE_NAME,
+      active.ACTIVE_TYPE,
+      active.ACTIVE_PRICE,
+      active.ACTIVE_START_DATE,
+      active.ACTIVE_END_DATE,
+      active.GMT_CREATE,
+      active.GMT_MODIFIED,
+      active.MEMO
+    FROM
+      active WHERE ACTIVE_ID =  #{activeId}
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap"  parameterType="com.wjq.model.Active">
+    SELECT
+    active.ID,
+    active.ACTIVE_ID,
+    active.ACTIVE_NAME,
+    active.ACTIVE_TYPE,
+    active.ACTIVE_PRICE,
+    active.ACTIVE_START_DATE,
+    active.ACTIVE_END_DATE,
+    active.GMT_CREATE,
+    active.GMT_MODIFIED,
+    active.MEMO
+    FROM
+    active WHERE 1 =1
+    <if test="activeName != null and activeName != ''">
+      and active.ACTIVE_NAME = activeName
+    </if>
+
+    <if test="activeType != null and activeType != ''">
+      and active.ACTIVE_TYPE = activeType
+    </if>
+
+  </select>
+
 </mapper>

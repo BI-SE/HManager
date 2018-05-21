@@ -144,19 +144,19 @@
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li >
+                        <li>
                             <a href="../user/userList.htm">
                                 <i class="fa fa-home"></i> 用户 </a>
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 1 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li class="active">
+                        <li >
                             <a href="../user/managerList.htm">
                                 <i class="fa fa-home"></i> 后台用户 </a>
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li >
+                        <li class="active">
                             <a href="../active/activeList.htm">
                                 <i class="fa fa-home"></i> 活动 </a>
                         </li>
@@ -271,37 +271,54 @@
         <div class="mobile-menu-handle"></div>
         <article class="content dashboard-page">
             <div class="col-md-12">
-                <form action="../user/userList.htm" method="post">
-                    <div class="form-group" >
-                        <label class="control-label">用户名</label>
-                        <input name="userName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
+                <form action="..//room/roomList.htm" method="post">
+                    <div class="form-group"  style="float:left;margin-right:20px">
+                        <label class="control-label">房间名</label>
+                        <input name="roomName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
+                    <div class="form-group"  style="float:left;margin-right:20px">
+                        <label class="control-label">房间类型</label>
+                        <input name="roomType" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
+                    <div class="form-group"  >
+                        <label class="control-label">房间状态</label>
+                        <input name="status" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
                     <button type="submit" class="btn btn-primary-outline">搜索</button>
+                    <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
                 </form>
                 <div class="card">
                     <div class="card-block">
                         <div class="card-title-block">
-                            <h3 class="title"> 后台用户列表 </h3>
+                            <h3 class="title"> 房间列表 </h3>
                         </div>
                         <section class="example">
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>用户名</th>
-                                    <th>等级权限</th>
+                                    <th>活动Id</th>
+                                    <th>活动名称</th>
+                                    <th>活动类型</th>
+                                    <th>活动价格</th>
+                                    <th>活动开始时间</th>
+                                    <th>活动结束时间</th>
                                     <th>创建时间</th>
                                     <th>修改时间</th>
                                     <th>备注</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="manager,managerStat: ${managerList}">
-                                    <th th:text="${managerStat.index+1}" scope="row">1</th>
-                                    <td th:text="${manager.userName}">11</td>
-                                    <td th:text="${manager.level}">11</td>
-                                    <td th:text="${#dates.format(manager.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${#dates.format(manager.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${manager.memo}">11</td>
+                                <tr th:each="active,activeStat: ${activeList}">
+                                    <th th:text="${activeStat.index+1}" scope="row">1</th>
+                                    <td th:text="${active.activeId}">111</td>
+                                    <td th:text="${active.activeName}">11</td>
+                                    <td th:text="${active.activeType}">11</td>
+                                    <td th:text="${active.activePrice}">11</td>
+                                    <td th:text="${#dates.format(active.activeStartDate,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${#dates.format(active.activeEndDate,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${#dates.format(active.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${#dates.format(active.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
+                                    <td th:text="${active.memo}">11</td>
+                                    <td><button type="button" class="btn btn-primary-outline" th:onclick="'javascript:qx('+${active.activeId}+');'">取消活动</button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -411,9 +428,9 @@
     {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function()
-        {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
+            {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
         a = s.createElement(o),
             m = s.getElementsByTagName(o)[0];
         a.async = 1;
@@ -426,17 +443,16 @@
     function insert(){
         var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
         var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
-        window.open('../room/editRoom.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
+        window.open('../active/editActive.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
-    function tf(orderNo,roomId) {
+    function qx(activeId) {
         jQuery.ajax({
             dataType:"text",
             type:"post",
-            url:"../order/quitRoom.do",
+            url:"../active/quitActive.do",
             data:{
-                orderNo:orderNo,
-                roomId:roomId
+                activeId:activeId
             },
             success:function (data) {
                 window.location.reload();
@@ -446,7 +462,6 @@
             }
         });
     }
-
 
 </script>
 <script src="../js/vendor.js"></script>

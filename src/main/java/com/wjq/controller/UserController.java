@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,14 +40,11 @@ public class UserController {
         return "/login";
     }
 
-    @ApiOperation(value = "登录" ,notes = "")
+    @ApiOperation(value = "登录")
     @ApiImplicitParam(name = "manager",value = "用户实体对象",required =true,dataType = "Manager")
-    @RequestMapping(value ="/index.htm",method = RequestMethod.GET)
-    public String index(HttpServletRequest request,@ModelAttribute Manager manager, Model model){
-
-        Manager managerSession = (Manager) request.getSession().getAttribute("manager");
-
-
+    @RequestMapping(value ="/login.do",method = RequestMethod.POST)
+    @ResponseBody
+    public Object login(HttpServletRequest request,@ModelAttribute Manager manager, Model model){
         if(null==manager){
             throw  new RuntimeException("请输入账号密码");
         }
@@ -55,7 +53,7 @@ public class UserController {
             throw  new RuntimeException("请输入账号密码");
         }
 
-     Manager managerDO =    managerMapper.selectByUserName(manager.getUserName());
+        Manager managerDO =    managerMapper.selectByUserName(manager.getUserName());
 
         if(null==managerDO){
             throw new RuntimeException("用户不存在，请确认账号!");
@@ -64,13 +62,29 @@ public class UserController {
         if(!managerDO.getUserPassword().equals(manager.getUserPassword())){
             throw  new RuntimeException("密码错误,请重新输入!");
         }
+        model.addAttribute("manager",managerDO);
+
+        request.getSession().setAttribute("manager",managerDO);
+
+        return "success";
+
+    }
+
+    @ApiOperation(value = "主页面" ,notes = "")
+    @ApiImplicitParam(name = "manager",value = "用户实体对象",required =true,dataType = "Manager")
+    @RequestMapping(value ="/index.htm",method = RequestMethod.GET)
+    public String index(HttpServletRequest request,@ModelAttribute Manager manager, Model model){
 
         List roomList = roomMapper.selectAll("0",null,null);
 
         model.addAttribute("roomList",roomList);
-        model.addAttribute("manager",managerDO);
 
-        request.getSession().setAttribute("manager",managerDO);
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+        model.addAttribute("manager",managerDO);
 
         return "/index";
     }
@@ -90,6 +104,9 @@ public class UserController {
         model.addAttribute("userList",userList);
 
 
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
 
         return "/user";
     }
@@ -103,6 +120,11 @@ public class UserController {
         Manager managerDO = (Manager) request.getSession().getAttribute("manager");
         model.addAttribute("manager",managerDO);
       model.addAttribute("managerList",managerList);
+
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
 
         return "/manager";
     }

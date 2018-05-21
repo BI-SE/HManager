@@ -1,7 +1,11 @@
 package com.wjq.mapper;
 
 import com.wjq.model.RoomConsumables;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+@Component("/roomConsumablesMapper")
 public interface RoomConsumablesMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +18,6 @@ public interface RoomConsumablesMapper {
     int updateByPrimaryKeySelective(RoomConsumables record);
 
     int updateByPrimaryKey(RoomConsumables record);
+
+    List selectList(RoomConsumables roomConsumables);
 }

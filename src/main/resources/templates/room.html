@@ -155,6 +155,18 @@
                                 <i class="fa fa-home"></i> 后台用户 </a>
                         </li>
                     </ul>
+                    <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../active/activeList.htm">
+                                <i class="fa fa-home"></i> 活动 </a>
+                        </li>
+                    </ul>
+                    <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../consumable/consumableList.htm">
+                                <i class="fa fa-home"></i> 消耗品 </a>
+                        </li>
+                    </ul>
                 </nav>
             </div>
             <footer class="sidebar-footer">
@@ -287,6 +299,7 @@
                                     <th>房间类型</th>
                                     <th>房间基础价格</th>
                                     <th>是否参与活动</th>
+                                    <th>活动名称</th>
                                     <th>房间状态</th>
                                     <th>创建时间</th>
                                     <th>修改时间</th>
@@ -302,11 +315,12 @@
                                     <td th:text="${room.roomType}">11</td>
                                     <td th:text="${room.price}">11</td>
                                     <td th:text="${room.isActive}">11</td>
+                                    <td th:if="${room.isActive} == '1'" th:text="${room.memo}">11</td>
                                     <td th:text="${room.status}">11</td>[
                                     <td th:text="${#dates.format(room.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${#dates.format(room.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${room.memo}">11</td>
-                                    <td><button th:if="${room.status} == '1'" type="button" class="btn btn-primary-outline" th:onclick="'javascript:tf('+${room.roomId}+');'">退房</button></td>
+                                    <td><button th:if="${room.isActive} == '1'" type="button" class="btn btn-primary-outline" th:onclick="'javascript:qx('+${room.roomId}+');'">取消活动</button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -434,8 +448,21 @@
         window.open('../room/editRoom.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
-    function tf(roomId) {
-
+    function qx(roomId) {
+        jQuery.ajax({
+            dataType:"text",
+            type:"post",
+            url:"../room/quitActive.do",
+            data:{
+                roomId:roomId
+            },
+            success:function (data) {
+                window.location.reload();
+            },
+            error:function (data) {
+                alert(data);
+            }
+        });
     }
 
 </script>
