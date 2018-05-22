@@ -20,5 +20,7 @@ public interface RoomConsumablesMapper {
 
     int updateByPrimaryKey(RoomConsumables record);
 
+    int updateStatusByRoomId(@Param(value = "status") String status,@Param(value = "roomId") String roomId);
+
     List selectList(@Param(value = "roomName") String roomName,@Param(value = "name") String name);
 }

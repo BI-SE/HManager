@@ -1,8 +1,10 @@
 package com.wjq.controller;
 
 import com.wjq.mapper.RoomConsumablesMapper;
-import com.wjq.model.Manager;
-import com.wjq.model.RoomConsumables;
+import com.wjq.mapper.RoomMapper;
+import com.wjq.mapper.RoomOrderMapper;
+import com.wjq.mapper.RoomSubOrderMapper;
+import com.wjq.model.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,15 @@ public class ConsumableController {
 
     @Autowired
     private RoomConsumablesMapper roomConsumablesMapper;
+
+    @Autowired
+    private RoomSubOrderMapper roomSubOrderMapper;
+
+    @Autowired
+    private RoomOrderMapper roomOrderMapper ;
+
+    @Autowired
+    private RoomMapper roomMapper;
 
     @ApiOperation(value = "消耗品列表",notes = "")
     @RequestMapping(value = "/consumableList.htm")
@@ -59,7 +70,7 @@ public class ConsumableController {
 
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "active", value = "活动实体", required = true, dataType = "Active")
-    @RequestMapping(value = "addConsumable,do", method = RequestMethod.POST)
+    @RequestMapping(value = "addConsumable.do", method = RequestMethod.POST)
     @ResponseBody
     public Object addConsumable(HttpServletRequest request, Model model) {
 
@@ -96,5 +107,51 @@ public class ConsumableController {
 
         return "success";
     }
+
+    @ApiOperation(value = "使用", notes = "")
+    @RequestMapping(value = "useConsumable.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Object useConsumable(HttpServletRequest request, Model model) {
+
+        String id = request.getParameter("id");
+
+
+        if(id==null||"".equals(id)){
+            throw new  RuntimeException("id不能为空");
+        }
+
+      RoomConsumables roomConsumables =  roomConsumablesMapper.selectByPrimaryKey(Long.parseLong(id));
+
+
+    Room room =roomMapper.selectByRoomId(roomConsumables.getRoomId());
+
+    if(null==room||"0".equals(room.getStatus())){
+        throw  new RuntimeException("房间没有使用");
+    }
+
+    RoomOrder roomOrder =roomOrderMapper.selectBRoomId(roomConsumables.getRoomId());
+
+        if(null==roomOrder){
+            throw  new RuntimeException("房间没有使用");
+        }
+
+        //插入子订单
+        RoomSubOrder roomSubOrder = new RoomSubOrder();
+        roomSubOrder.setAmount(roomConsumables.getPrice());
+        roomSubOrder.setGmtCreate(new Date());
+        roomSubOrder.setGmtModified(new Date());
+        roomSubOrder.setOrderId(roomOrder.getOrderNo());
+        roomSubOrder.setPayStatus("0");
+        roomSubOrder.setSubOrderId("sub"+System.currentTimeMillis());
+        roomSubOrder.setType("0");
+        roomSubOrderMapper.insert(roomSubOrder);
+
+        roomConsumablesMapper.updateStatusByRoomId("2",roomConsumables.getRoomId());
+
+
+        return "success";
+    }
+
+
 
 }

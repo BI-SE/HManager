@@ -147,5 +147,14 @@
       and  room_consumables.NAME = #{name}
     </if>
 
+    ORDER BY GMT_MODIFIED DESC
+
   </select>
+
+  <update id="updateStatusByRoomId">
+    UPDATE room_consumables
+    SET STATUS = #{status},
+    GMT_MODIFIED = CURRENT_TIMESTAMP
+    WHERE ROOM_ID = #{roomId}
+  </update>
 </mapper>

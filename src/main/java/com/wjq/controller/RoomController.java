@@ -40,6 +40,9 @@ public class RoomController {
     @Autowired
     private ActiveMapper activeMapper;
 
+    @Autowired
+    private RoomConsumablesMapper roomConsumablesMapper;
+
     @ApiOperation(value = "登记页面", notes = "")
     @RequestMapping(value = "signRoom.htm", method = RequestMethod.GET)
     public String signRoom(HttpServletRequest request, Model model) {
@@ -110,6 +113,8 @@ public class RoomController {
         roomSubOrderMapper.insert(roomSubOrder);
 
         roomOrderMapper.insert(roomOrder);
+
+        roomConsumablesMapper.updateStatusByRoomId("1",roomId);
 
         if (null != flag && flag.equals("1")) {
             roomMapper.updateByRoomId(roomId);

@@ -188,7 +188,7 @@
     <if test="activeType != null and activeType != ''">
       and active.ACTIVE_TYPE = #{activeType}
     </if>
-
+    ORDER BY GMT_MODIFIED DESC
   </select>
 
   <update id="updateDate" parameterType="com.wjq.model.Active">

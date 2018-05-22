@@ -184,7 +184,7 @@
     <if test="roomName != null and roomName != ''">
       and room.ROOM_NAME = #{roomName}
     </if>
-
+    ORDER BY GMT_MODIFIED DESC
   </select>
 
   <update id="updateStatusByOrderNo">
@@ -192,5 +192,23 @@
     SET  STATUS = #{status}
     WHERE  ORDER_NO = #{orderNo}
   </update>
+
+  <select id="selectBRoomId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+      room_order.ID ,
+      room_order.ROOM_ID ,
+      room_order.USER_ID ,
+      room_order.ORDER_NO ,
+      room_order.ACTIVE_ID ,
+      room_order.DEPOSIT_AMOUNT ,
+      room_order.STATUS ,
+      room_order.GMT_CREATE ,
+      room_order.GMT_MODIFIED ,
+      room_order.MEMO
+    FROM
+      room_order WHERE room_order.ROOM_ID=#{roomId} ORDER BY GMT_MODIFIED DESC LIMIT 1
+  </select>
+
+
 
 </mapper>

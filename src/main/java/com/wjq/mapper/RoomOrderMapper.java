@@ -25,4 +25,8 @@ public interface RoomOrderMapper {
     int updateByPrimaryKey(RoomOrder record);
 
     List selectAll(@Param(value = "userName") String userName,@Param(value = "roomName") String roomName);
+
+
+    RoomOrder selectBRoomId(String roomId);
+
 }

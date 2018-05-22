@@ -313,7 +313,7 @@
                                     <td th:text="${#dates.format(consumable.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${#dates.format(consumable.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${consumable.memo}">11</td>
-                                    <td><button type="button" class="btn btn-primary-outline" th:onclick="'javascript:qx('+${consumable.id}+');'">使用</button></td>
+                                    <td th:if="${consumable.status} eq '1'"><button type="button" class="btn btn-primary-outline" th:onclick="'javascript:use('+${consumable.id}+');'">使用</button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -441,13 +441,13 @@
         window.open('../consumable/editConsumable.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
-    function qx(activeId) {
+    function use(id) {
         jQuery.ajax({
             dataType:"text",
             type:"post",
-            url:"../active/quitActive.do",
+            url:"../consumable/useConsumable.do",
             data:{
-                activeId:activeId
+                id:id
             },
             success:function (data) {
                 window.location.reload();

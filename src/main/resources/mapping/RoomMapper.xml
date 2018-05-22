@@ -197,6 +197,7 @@
             and  room.ROOM_NAME = #{roomName}
           </if>
 
+    ORDER BY GMT_MODIFIED DESC
   </select>
 
     <select id="selectByRoomId" resultMap="BaseResultMap" parameterType="java.lang.String">

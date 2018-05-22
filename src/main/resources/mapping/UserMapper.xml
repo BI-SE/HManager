@@ -180,6 +180,8 @@
       and CERT_NO = #{certNo}
     </if>
 
+    ORDER BY GMT_MODIFIED DESC
+
   </select>
   
 </mapper>
