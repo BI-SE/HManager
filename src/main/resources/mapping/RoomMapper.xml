@@ -183,10 +183,10 @@
         room.GMT_MODIFIED,
         room.MEMO
       FROM
-        room room
-        <where>
+        room room  where  1 =1
+
           <if test="status !=null and status !=''">
-            room.STATUS = #{status}
+            and room.STATUS = #{status}
           </if>
 
           <if test="roomType !=null and roomType !=''">
@@ -197,7 +197,6 @@
             and  room.ROOM_NAME = #{roomName}
           </if>
 
-        </where>
   </select>
 
     <select id="selectByRoomId" resultMap="BaseResultMap" parameterType="java.lang.String">

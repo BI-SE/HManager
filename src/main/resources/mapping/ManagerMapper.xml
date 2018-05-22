@@ -140,7 +140,7 @@
     FROM
       manager where 1 = 1
       <if test="userName != null and userName !=''" >
-        manager.USER_NAME = #{userName}
+       and manager.USER_NAME = #{userName}
       </if>
   </select>
 

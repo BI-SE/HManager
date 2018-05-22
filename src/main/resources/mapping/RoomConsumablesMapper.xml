@@ -126,7 +126,7 @@
     where ID = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="selectList" resultMap="BaseResultMap"parameterType="com.wjq.model.RoomConsumables">
+  <select id="selectList" resultMap="BaseResultMap" >
     SELECT
       room_consumables.ID,
       room_consumables.ROOM_ID,
@@ -137,7 +137,15 @@
       room_consumables.GMT_MODIFIED,
       room_consumables.MEMO
     FROM
-      room_consumables
+      room_consumables left join room room on room.ROOM_ID = room_consumables.ROOM_ID where  1 =1
+
+    <if test="roomName !=null and roomName !=''">
+      and  room.ROOM_NAME = #{roomName}
+    </if>
+
+    <if test="name !=null and name !=''">
+      and  room_consumables.NAME = #{name}
+    </if>
 
   </select>
 </mapper>

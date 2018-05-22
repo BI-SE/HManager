@@ -182,13 +182,55 @@
     FROM
     active WHERE 1 =1
     <if test="activeName != null and activeName != ''">
-      and active.ACTIVE_NAME = activeName
+      and active.ACTIVE_NAME = #{activeName}
     </if>
 
     <if test="activeType != null and activeType != ''">
-      and active.ACTIVE_TYPE = activeType
+      and active.ACTIVE_TYPE = #{activeType}
     </if>
 
   </select>
+
+  <update id="updateDate" parameterType="com.wjq.model.Active">
+    update active
+    set ACTIVE_END_DATE = ACTIVE_START_DATE,
+    GMT_MODIFIED = CURRENT_TIMESTAMP
+    WHERE  ACTIVE_ID = #{activeId}
+  </update>
+
+
+
+  <update id="updateByActiveId" parameterType="com.wjq.model.Active" >
+    update active
+    set
+
+      <if test="activeName != null and activeName!=''" >
+        ACTIVE_NAME = #{activeName},
+      </if>
+
+      <if test="activeType != null and activeType!=''" >
+        ACTIVE_TYPE = #{activeType},
+      </if>
+
+      <if test="activePrice != null and activePrice!=''" >
+        ACTIVE_PRICE = #{activePrice},
+      </if>
+
+      <if test="activeStartDate != null" >
+        ACTIVE_START_DATE = #{activeStartDate},
+      </if>
+
+      <if test="activeEndDate != null " >
+        ACTIVE_END_DATE = #{activeEndDate},
+      </if>
+
+      <if test="memo != null" >
+        MEMO = #{memo},
+      </if>
+
+      GMT_MODIFIED = CURRENT_TIMESTAMP
+
+    where ACTIVE_ID = #{activeId}
+  </update>
 
 </mapper>

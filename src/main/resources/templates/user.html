@@ -271,16 +271,16 @@
         <div class="mobile-menu-handle"></div>
         <article class="content dashboard-page">
             <div class="col-md-12">
-                <form action="../user/userList.htm" method="post">
+                <form action="../user/userList.htm" method="get">
                     <div class="form-group"  style="float:left;margin-right:20px">
                         <label class="control-label">用户名</label>
-                        <input name="userName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
+                        <input name="userName" type="text" style="width:200px" th:value="${userName}" class="form-control underlined"> </div>
                     <div class="form-group"  style="float:left;margin-right:20px">
                         <label class="control-label">手机号</label>
-                        <input name="cell" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
+                        <input name="cell" type="text" style="width:200px" th:value="${cell}" class="form-control underlined"> </div>
                     <div class="form-group"  >
                         <label class="control-label">证件号</label>
-                        <input name="certNo" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
+                        <input name="certNo" type="text" style="width:200px" th:value="${certNo}" class="form-control underlined"> </div>
                     <button type="submit" class="btn btn-primary-outline">搜索</button>
                 </form>
                 <div class="card">

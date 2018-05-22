@@ -1,7 +1,6 @@
 package com.wjq.controller;
 
 import com.wjq.mapper.RoomConsumablesMapper;
-import com.wjq.model.Active;
 import com.wjq.model.Manager;
 import com.wjq.model.RoomConsumables;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -33,12 +31,20 @@ public class ConsumableController {
     @ApiOperation(value = "消耗品列表",notes = "")
     @RequestMapping(value = "/consumableList.htm")
     public String consumableList(HttpServletRequest request, Model model){
-     List consumableList = roomConsumablesMapper.selectList(null);
+
+        String roomName = request.getParameter("roomName");
+        String name = request.getParameter("name");
+
+        List consumableList = roomConsumablesMapper.selectList(roomName,name);
 
         Manager managerDO = (Manager) request.getSession().getAttribute("manager");
         model.addAttribute("manager",managerDO);
 
         model.addAttribute("consumableList",consumableList);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
 
         return "/consumable";
 

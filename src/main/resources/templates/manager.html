@@ -271,11 +271,12 @@
         <div class="mobile-menu-handle"></div>
         <article class="content dashboard-page">
             <div class="col-md-12">
-                <form action="../user/userList.htm" method="post">
+                <form action="../user/managerList.htm" method="get">
                     <div class="form-group" >
                         <label class="control-label">用户名</label>
-                        <input name="userName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
+                        <input name="userName" type="text" style="width:200px" th:value="${userName}" class="form-control underlined"> </div>
                     <button type="submit" class="btn btn-primary-outline">搜索</button>
+                    <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
                 </form>
                 <div class="card">
                     <div class="card-block">
@@ -426,7 +427,7 @@
     function insert(){
         var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
         var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
-        window.open('../room/editRoom.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
+        window.open('../user/editManager.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
     function tf(orderNo,roomId) {

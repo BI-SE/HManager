@@ -42,6 +42,9 @@ public class OrderController {
 
         model.addAttribute("orderList",orderList);
 
+        model.addAttribute("userName",userName);
+        model.addAttribute("roomName",roomName);
+
 
         if(null==managerDO||"".equals(managerDO.getLevel())){
             return "/login";

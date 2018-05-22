@@ -271,16 +271,13 @@
         <div class="mobile-menu-handle"></div>
         <article class="content dashboard-page">
             <div class="col-md-12">
-                <form action="..//room/roomList.htm" method="post">
+                <form action="../active/activeList.htm" method="get">
                     <div class="form-group"  style="float:left;margin-right:20px">
-                        <label class="control-label">房间名</label>
-                        <input name="roomName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
-                    <div class="form-group"  style="float:left;margin-right:20px">
-                        <label class="control-label">房间类型</label>
-                        <input name="roomType" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
-                    <div class="form-group"  >
-                        <label class="control-label">房间状态</label>
-                        <input name="status" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
+                        <label class="control-label">活动名称</label>
+                        <input name="activeName" type="text" style="width:200px" th:value="${activeName}" class="form-control underlined"> </div>
+                    <div class="form-group" >
+                        <label class="control-label">活动类型</label>
+                        <input name="activeType" type="text" style="width:200px" th:value="${activeType}" class="form-control underlined"> </div>
                     <button type="submit" class="btn btn-primary-outline">搜索</button>
                     <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
                 </form>
@@ -318,7 +315,8 @@
                                     <td th:text="${#dates.format(active.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${#dates.format(active.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${active.memo}">11</td>
-                                    <td><button type="button" class="btn btn-primary-outline" th:onclick="'javascript:qx('+${active.activeId}+');'">取消活动</button></td>
+                                    <td th:if="${active.activeStartDate} ne ${active.activeEndDate}"><button  type="button" class="btn btn-primary-outline" th:onclick="'javascript:qx(\''+${active.activeId}+'\');'">取消活动</button></td>
+                                    <td th:if="${active.activeStartDate} eq ${active.activeEndDate}"><button  type="button" class="btn btn-primary-outline" th:onclick="'javascript:qy(\''+${active.activeId}+'\');'">启用活动</button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -444,6 +442,12 @@
         var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
         var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
         window.open('../active/editActive.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
+    }
+
+    function qy(activeId){
+        var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
+        window.open('../active/editActive.htm?activeId='+activeId, '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
     function qx(activeId) {

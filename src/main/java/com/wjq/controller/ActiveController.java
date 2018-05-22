@@ -5,7 +5,6 @@ import com.wjq.model.Active;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.omg.PortableInterceptor.ACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,36 +32,66 @@ public class ActiveController {
     @RequestMapping(value = "/activeList.htm")
     public String activeList(HttpServletRequest request, Model model){
 
-       List activeList =  activeMapper.selectList(null);
+        String activeName = request.getParameter("activeName");
+        String activeType = request.getParameter("activeType");
+
+        Active active = new Active();
+        active.setActiveName(activeName);
+        active.setActiveType(activeType);
+
+        List activeList =  activeMapper.selectList(active);
 
         Manager managerDO = (Manager) request.getSession().getAttribute("manager");
         model.addAttribute("manager",managerDO);
 
         model.addAttribute("activeList",activeList);
 
+        model.addAttribute("activeName",activeName);
+        model.addAttribute("activeType",activeType);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
         return "/active";
     }
 
 
-    @ApiOperation(value = "新增活动", notes = "")
+    @ApiOperation(value = "新增/修改活动", notes = "")
     @RequestMapping(value = "editActive.htm")
     public String addRoom(HttpServletRequest request, Model model) {
+        String activeId = request.getParameter("activeId");
+        String activeFlag = "-1";
+        Active active = new Active();
 
+        if(null!=activeId&&!"".equals(activeId)){
+             active =    activeMapper.selectByActiveId(activeId);
+
+            if(null!=active){
+                activeFlag = "1";
+            }
+
+        }
+        model.addAttribute("active",active);
+        model.addAttribute("activeFlag",activeFlag);
 
         return "/editActive";
     }
 
     @ApiOperation(value = "新增", notes = "")
     @ApiImplicitParam(name = "active", value = "活动实体", required = true, dataType = "Active")
-    @RequestMapping(value = "addActive,do", method = RequestMethod.POST)
+    @RequestMapping(value = "/addActive.do", method = RequestMethod.POST)
     @ResponseBody
     public Object addActive(HttpServletRequest request, Model model) {
 
+        String activeId = request.getParameter("activeId");
         String activeName = request.getParameter("activeName");
         String activeType = request.getParameter("activeType");
         String activePrice = request.getParameter("activePrice");
         String activeStartDate = request.getParameter("activeStartDate");
         String activeEndDate = request.getParameter("activeEndDate");
+
+
 
         if(activeName==null||"".equals(activeName)){
             throw new  RuntimeException("活动名称不能为空");
@@ -104,7 +133,12 @@ public class ActiveController {
         active.setGmtCreate(new Date());
         active.setGmtModified(new Date());
 
-        activeMapper.insert(active);
+        if(null!=activeId&&!"".equals(activeId)){
+            active.setActiveId(activeId);
+            activeMapper.updateByActiveId(active);
+        }else{
+            activeMapper.insert(active);
+        }
 
         return "success";
     }
@@ -122,7 +156,8 @@ public class ActiveController {
 
         Active active = new  Active();
         active.setActiveEndDate(activeMapper.selectByActiveId(activeId).getActiveStartDate());
-        activeMapper.updateByPrimaryKeySelective(active);
+        active.setActiveId(activeId);
+        activeMapper.updateDate(active);
 
         return "success";
     }

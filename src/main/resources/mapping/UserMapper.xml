@@ -170,14 +170,14 @@
      user where 1=1
 
     <if test="userName != null and userName != ''" >
-      NAME = #{userName},
+      and NAME = #{userName}
     </if>
     <if test="cell != null and cell != ''" >
-      CELL = #{cell},
+      and CELL = #{cell}
     </if>
 
     <if test="certNo != null and certNo != ''" >
-      CERT_NO = #{certNo},
+      and CERT_NO = #{certNo}
     </if>
 
   </select>

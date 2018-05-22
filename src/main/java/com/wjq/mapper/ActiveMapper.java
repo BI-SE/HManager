@@ -19,6 +19,10 @@ public interface ActiveMapper {
 
     int updateByPrimaryKey(Active record);
 
+    int updateByActiveId(Active record);
+
+    int updateDate(Active record);
+
     Active selectByActiveId(String activeId);
 
     List selectList(Active active);

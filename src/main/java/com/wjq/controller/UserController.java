@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,6 +104,10 @@ public class UserController {
 
         model.addAttribute("userList",userList);
 
+        model.addAttribute("userName",userName);
+        model.addAttribute("cell",cell);
+        model.addAttribute("certNo",certNo);
+
 
         if(null==managerDO||"".equals(managerDO.getLevel())){
             return "/login";
@@ -115,11 +120,17 @@ public class UserController {
     @RequestMapping(value = "/managerList.htm",method =RequestMethod.GET)
     public String managerList(HttpServletRequest request,Model model){
 
-      List managerList =   managerMapper.selectAll(null);
+        String userName = request.getParameter("userName");
+
+        Manager manager = new Manager();
+        manager.setUserName(userName);
+      List managerList =   managerMapper.selectAll(manager);
 
         Manager managerDO = (Manager) request.getSession().getAttribute("manager");
         model.addAttribute("manager",managerDO);
-      model.addAttribute("managerList",managerList);
+        model.addAttribute("managerList",managerList);
+
+        model.addAttribute("userName",userName);
 
 
         if(null==managerDO||"".equals(managerDO.getLevel())){
@@ -129,5 +140,47 @@ public class UserController {
         return "/manager";
     }
 
+    @ApiOperation(value = "新增后台用户", notes = "")
+    @RequestMapping(value = "editManager.htm")
+    public String addRoom(HttpServletRequest request, Model model) {
+
+
+        return "/editManager";
+    }
+
+
+    @ApiOperation(value = "新增", notes = "")
+    @ApiImplicitParam(name = "manager", value = "活动实体", required = true, dataType = "Manager")
+    @RequestMapping(value = "/addManager.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Object addActive(HttpServletRequest request, Model model) {
+
+        String userName = request.getParameter("userName");
+        String userPassword = request.getParameter("userPassword");
+        String level = request.getParameter("level");
+
+        if(userName==null||"".equals(userName)){
+            throw new  RuntimeException("后台用户名称不能为空");
+        }
+
+        if(userPassword==null||"".equals(userPassword)){
+            throw new  RuntimeException("密码不能为空");
+        }
+
+        if(level==null||"".equals(level)){
+            throw new  RuntimeException("权限等级不能为空");
+        }
+
+        Manager manager = new Manager();
+        manager.setUserName(userName);
+        manager.setGmtCreate(new Date());
+        manager.setGmtModified(new Date());
+        manager.setLevel(Integer.parseInt(level));
+        manager.setUserPassword(userPassword);
+
+        managerMapper.insert(manager);
+
+        return "success";
+    }
 
 }

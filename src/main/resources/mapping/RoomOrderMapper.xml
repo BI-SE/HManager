@@ -178,11 +178,11 @@
     WHERE 1= 1
 
     <if test="userName != null and userName != ''">
-      userr.NAME = #{userName}
+      and userr.NAME = #{userName}
     </if>
 
     <if test="roomName != null and roomName != ''">
-      room.ROOM_NAME = #{roomName}
+      and room.ROOM_NAME = #{roomName}
     </if>
 
   </select>

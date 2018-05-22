@@ -271,16 +271,15 @@
         <div class="mobile-menu-handle"></div>
         <article class="content dashboard-page">
             <div class="col-md-12">
-                <form action="..//room/roomList.htm" method="post">
+                <form action="../consumable/consumableList.htm" method="post">
                     <div class="form-group"  style="float:left;margin-right:20px">
                         <label class="control-label">房间名</label>
                         <input name="roomName" type="text" style="width:200px" th:value="${roomName}" class="form-control underlined"> </div>
-                    <div class="form-group"  style="float:left;margin-right:20px">
-                        <label class="control-label">房间类型</label>
-                        <input name="roomType" type="text" style="width:200px" th:value="${roomType}" class="form-control underlined"> </div>
-                    <div class="form-group"  >
-                        <label class="control-label">房间状态</label>
-                        <input name="status" type="text" style="width:200px" th:value="${status}" class="form-control underlined"> </div>
+
+                    <div class="form-group" >
+                        <label class="control-label">消耗品名称</label>
+                        <input name="name" type="text" style="width:200px" th:value="${name}" class="form-control underlined"> </div>
+
                     <button type="submit" class="btn btn-primary-outline">搜索</button>
                     <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
                 </form>

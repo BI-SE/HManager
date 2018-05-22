@@ -24,30 +24,33 @@
         }
     </script>
     <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/laydate/laydate.js"></script>
 </head>
 <body>
 <div class="col-md-6">
     <div class="card card-block sameheight-item">
         <div class="title-block">
-            <h3 class="title"> 新增活动 </h3>
+            <h3 th:if="${activeFlag} eq '-1'" class="title"> 新增活动 </h3>
+            <h3 th:if="${activeFlag} eq '1'" class="title"> 修改活动 </h3>
         </div>
         <form role="form" id="form1">
             <div class="form-group">
                 <label class="control-label">活动名称</label>
-                <input name="activeName" type="text" class="form-control underlined"> </div>
+                <input name="activeId" type="text" hidden ="hidden" th:value="${active.activeId}" class="form-control underlined"> </div>
+                <input name="activeName" type="text" th:value="${active.activeName}" class="form-control underlined"> </div>
             <div class="form-group">
                 <label class="control-label">活动类型</label>
-                <input name="activeType" type="text" class="form-control underlined"> </div>
+                <input name="activeType" type="text" th:value="${active.activeType}" class="form-control underlined"> </div>
             <div class="form-group">
                 <label class="control-label">活动价格</label>
-                <input name="activePrice" type="text" class="form-control underlined"> </div>
+                <input name="activePrice" type="text" th:value="${active.activePrice}" class="form-control underlined"> </div>
             <div class="form-group">
                 <label class="control-label">活动开始时间</label>
-                <input name="activeStartDate" type="datetime" class="form-control underlined"> </div>
+                <input name="activeStartDate" id="activeStartDate" type="text" th:value="${#dates.format(active.activeStartDate,'yyyy-MM-dd HH:mm:ss')}" class="form-control underlined"> </div>
             <div class="form-group">
                 <label class="control-label">活动结束时间</label>
-                <input name="activeEndDate" type="datetime" class="form-control underlined"> </div>
-            <button type="button" class="btn btn-primary-outline" onclick="addActive()">继续</button>
+                <input name="activeEndDate" id="activeEndDate" type="text" th:value="${#dates.format(active.activeEndDate,'yyyy-MM-dd HH:mm:ss')}" class="form-control underlined"> </div>
+            <button type="button" class="btn btn-primary-outline" onclick="addActive()">完成</button>
         </form>
     </div>
 </div>
@@ -72,6 +75,17 @@
             }
         });
     }
+
+    //时间选择器
+    laydate.render({
+        elem: '#activeStartDate'
+        ,type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#activeEndDate'
+        ,type: 'datetime'
+    });
 
 </script>
 

@@ -1,6 +1,7 @@
 package com.wjq.mapper;
 
 import com.wjq.model.RoomConsumables;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface RoomConsumablesMapper {
 
     int updateByPrimaryKey(RoomConsumables record);
 
-    List selectList(RoomConsumables roomConsumables);
+    List selectList(@Param(value = "roomName") String roomName,@Param(value = "name") String name);
 }
