@@ -1,8 +1,10 @@
 package com.wjq.controller;
 
+import com.wjq.mapper.LogMapper;
 import com.wjq.mapper.ManagerMapper;
 import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.UserMapper;
+import com.wjq.model.Log;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private LogMapper logMapper;
 
     @ApiOperation(value = "进入登录页面",notes = "")
     @RequestMapping(value = "/login.htm",method =RequestMethod.GET)
@@ -67,6 +73,11 @@ public class UserController {
 
         request.getSession().setAttribute("manager",managerDO);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"登录");
+        logMapper.insert(log);
+
         return "success";
 
     }
@@ -86,6 +97,11 @@ public class UserController {
             return "/login";
         }
         model.addAttribute("manager",managerDO);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入主页面");
+        logMapper.insert(log);
 
         return "/index";
     }
@@ -113,6 +129,11 @@ public class UserController {
             return "/login";
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入用户列表页面");
+        logMapper.insert(log);
+
         return "/user";
     }
 
@@ -137,6 +158,11 @@ public class UserController {
             return "/login";
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入后台管理用户页面");
+        logMapper.insert(log);
+
         return "/manager";
     }
 
@@ -144,6 +170,17 @@ public class UserController {
     @RequestMapping(value = "editManager.htm")
     public String addRoom(HttpServletRequest request, Model model) {
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入新增后台用户页面");
+        logMapper.insert(log);
 
         return "/editManager";
     }
@@ -179,6 +216,12 @@ public class UserController {
         manager.setUserPassword(userPassword);
 
         managerMapper.insert(manager);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增后台用户"+userName+"权限为"+level);
+        logMapper.insert(log);
 
         return "success";
     }

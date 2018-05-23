@@ -167,6 +167,12 @@
                                 <i class="fa fa-home"></i> 消耗品 </a>
                         </li>
                     </ul>
+                    <ul th:if="${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../log/log.htm">
+                                <i class="fa fa-home"></i> 日志 </a>
+                        </li>
+                    </ul>
                 </nav>
             </div>
             <footer class="sidebar-footer">

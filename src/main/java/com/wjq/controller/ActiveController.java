@@ -1,7 +1,9 @@
 package com.wjq.controller;
 
 import com.wjq.mapper.ActiveMapper;
+import com.wjq.mapper.LogMapper;
 import com.wjq.model.Active;
+import com.wjq.model.Log;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,9 @@ public class ActiveController {
     @Autowired
     private ActiveMapper activeMapper;
 
+    @Autowired
+    private LogMapper logMapper;
+
     @ApiOperation(value = "/活动列表",notes = "")
     @RequestMapping(value = "/activeList.htm")
     public String activeList(HttpServletRequest request, Model model){
@@ -53,6 +58,10 @@ public class ActiveController {
             return "/login";
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入活动页面");
+        logMapper.insert(log);
         return "/active";
     }
 
@@ -71,7 +80,29 @@ public class ActiveController {
                 activeFlag = "1";
             }
 
+
         }
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+
+        if(null!=activeId&&!"".equals(activeId)){
+
+            log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入修改活动页面");
+
+        }else{
+            log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入新增活动页面");
+        }
+
+        logMapper.insert(log);
+
         model.addAttribute("active",active);
         model.addAttribute("activeFlag",activeFlag);
 
@@ -140,6 +171,12 @@ public class ActiveController {
             activeMapper.insert(active);
         }
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增"+activeName+"活动");
+        logMapper.insert(log);
+
         return "success";
     }
 
@@ -158,6 +195,12 @@ public class ActiveController {
         active.setActiveEndDate(activeMapper.selectByActiveId(activeId).getActiveStartDate());
         active.setActiveId(activeId);
         activeMapper.updateDate(active);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"取消"+active.getActiveName()+"活动");
+        logMapper.insert(log);
 
         return "success";
     }

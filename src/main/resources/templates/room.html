@@ -167,6 +167,12 @@
                                 <i class="fa fa-home"></i> 消耗品 </a>
                         </li>
                     </ul>
+                    <ul th:if="${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../log/log.htm">
+                                <i class="fa fa-home"></i> 日志 </a>
+                        </li>
+                    </ul>
                 </nav>
             </div>
             <footer class="sidebar-footer">
@@ -315,7 +321,7 @@
                                     <td th:text="${room.roomType}">11</td>
                                     <td th:text="${room.price}">11</td>
                                     <td th:text="${room.isActive}">11</td>
-                                    <td th:if="${room.isActive} == '1'" th:text="${room.memo}">11</td>
+                                    <td th:text="${room.memo}">11</td>
                                     <td th:text="${room.status}">11</td>[
                                     <td th:text="${#dates.format(room.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${#dates.format(room.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>

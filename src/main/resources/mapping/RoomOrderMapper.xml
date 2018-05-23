@@ -184,7 +184,7 @@
     <if test="roomName != null and roomName != ''">
       and room.ROOM_NAME = #{roomName}
     </if>
-    ORDER BY GMT_MODIFIED DESC
+    ORDER BY room_order.GMT_MODIFIED DESC
   </select>
 
   <update id="updateStatusByOrderNo">

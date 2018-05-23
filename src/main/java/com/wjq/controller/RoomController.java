@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class RoomController {
     @Autowired
     private RoomConsumablesMapper roomConsumablesMapper;
 
+    @Autowired
+    private LogMapper logMapper;
+
     @ApiOperation(value = "登记页面", notes = "")
     @RequestMapping(value = "signRoom.htm", method = RequestMethod.GET)
     public String signRoom(HttpServletRequest request, Model model) {
@@ -59,6 +63,12 @@ public class RoomController {
         if(null==managerDO||"".equals(managerDO.getLevel())){
             return "/login";
         }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入登记页面");
+        logMapper.insert(log);
+
         return "/signRoom";
     }
 
@@ -121,6 +131,12 @@ public class RoomController {
             roomOrderMapper.updateStatusByRoomId(roomId);
         }
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"登记"+room.getRoomName()+",用户为"+user.getName());
+        logMapper.insert(log);
+
         return "success";
     }
 
@@ -158,6 +174,11 @@ public class RoomController {
             return "/login";
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入房间列表");
+        logMapper.insert(log);
+
         return "/room";
     }
 
@@ -165,6 +186,17 @@ public class RoomController {
     @RequestMapping(value = "editRoom.htm")
     public String addRoom(HttpServletRequest request, Model model) {
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入新增房间页面");
+        logMapper.insert(log);
 
         return "/editRoom";
     }
@@ -205,6 +237,12 @@ public class RoomController {
         room.setIsActive("1");
         roomMapper.insert(room);
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增"+roomName+"房间");
+        logMapper.insert(log);
+
         return "success";
     }
 
@@ -221,6 +259,12 @@ public class RoomController {
         }
 
         roomMapper.updateActiveByRoomId(roomId);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"取消"+roomId+"房间活动");
+        logMapper.insert(log);
 
         return "success";
     }

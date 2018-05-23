@@ -1,9 +1,12 @@
 package com.wjq.controller;
 
+import com.wjq.mapper.LogMapper;
 import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.RoomOrderMapper;
+import com.wjq.model.Log;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +31,9 @@ public class OrderController {
 
     @Resource
     private RoomMapper roomMapper;
+
+    @Autowired
+    private LogMapper logMapper;
 
     @ApiOperation(value = "订单列表页面",notes = "")
     @RequestMapping("/orderList.htm")
@@ -49,6 +57,12 @@ public class OrderController {
         if(null==managerDO||"".equals(managerDO.getLevel())){
             return "/login";
         }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入订单列表页面");
+        logMapper.insert(log);
+
         return  "/order";
     }
 
@@ -71,6 +85,12 @@ public class OrderController {
 
         roomMapper.updateStateByRoomId(roomId,"0");
         roomOrderMapper.updateStatusByOrderNo(orderNo,"2");
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"退"+roomId+"房间");
+        logMapper.insert(log);
 
         return  "successr";
     }

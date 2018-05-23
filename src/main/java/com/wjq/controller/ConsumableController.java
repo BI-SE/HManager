@@ -1,9 +1,6 @@
 package com.wjq.controller;
 
-import com.wjq.mapper.RoomConsumablesMapper;
-import com.wjq.mapper.RoomMapper;
-import com.wjq.mapper.RoomOrderMapper;
-import com.wjq.mapper.RoomSubOrderMapper;
+import com.wjq.mapper.*;
 import com.wjq.model.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +37,9 @@ public class ConsumableController {
     @Autowired
     private RoomMapper roomMapper;
 
+    @Autowired
+    private LogMapper logMapper;
+
     @ApiOperation(value = "消耗品列表",notes = "")
     @RequestMapping(value = "/consumableList.htm")
     public String consumableList(HttpServletRequest request, Model model){
@@ -57,6 +58,11 @@ public class ConsumableController {
             return "/login";
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入消耗品列表");
+        logMapper.insert(log);
+
         return "/consumable";
 
     }
@@ -64,6 +70,17 @@ public class ConsumableController {
     @RequestMapping(value = "editConsumable.htm")
     public String editConsumable(HttpServletRequest request, Model model) {
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入新增消耗品页面");
+        logMapper.insert(log);
 
         return "/editConsumable";
     }
@@ -104,6 +121,12 @@ public class ConsumableController {
         roomConsumables.setStatus(status);
 
         roomConsumablesMapper.insert(roomConsumables);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增消耗品"+name);
+        logMapper.insert(log);
 
         return "success";
     }
@@ -148,6 +171,11 @@ public class ConsumableController {
 
         roomConsumablesMapper.updateStatusByRoomId("2",roomConsumables.getRoomId());
 
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"使用消耗品"+roomConsumables.getName());
+        logMapper.insert(log);
 
         return "success";
     }
