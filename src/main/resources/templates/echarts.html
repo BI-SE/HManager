@@ -9,6 +9,7 @@
     <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
     <link rel="stylesheet" href="../css/vendor.css">
+
     <!-- Theme initialization -->
     <script>
         var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
@@ -23,6 +24,7 @@
             document.write('<link rel="stylesheet" id="theme-style" href="../css/app.css">');
         }
     </script>
+    <script src="../js/echarts.js"/>
 </head>
 <body>
 <div class="main-wrapper">
@@ -144,13 +146,13 @@
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li >
+                        <li>
                             <a href="../user/userList.htm">
                                 <i class="fa fa-home"></i> 用户 </a>
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 1 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li class="active">
+                        <li >
                             <a href="../user/managerList.htm">
                                 <i class="fa fa-home"></i> 后台用户 </a>
                         </li>
@@ -174,7 +176,7 @@
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
-                        <li >
+                        <li class="active">
                             <a href="../log/charts.htm">
                                 <i class="fa fa-home"></i> 图表 </a>
                         </li>
@@ -278,51 +280,11 @@
                 </ul>
             </footer>
         </aside>
+        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div id="main1" style="width: 600px;height:400px;"></div>
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
         <div class="sidebar-mobile-menu-handle" id="sidebar-mobile-menu-handle"></div>
         <div class="mobile-menu-handle"></div>
-        <article class="content dashboard-page">
-            <div class="col-md-12">
-                <form action="../user/managerList.htm" method="get">
-                    <div class="form-group" >
-                        <label class="control-label">用户名</label>
-                        <input name="userName" type="text" style="width:200px" th:value="${userName}" class="form-control underlined"> </div>
-                    <button type="submit" class="btn btn-primary-outline">搜索</button>
-                    <button type="button" class="btn btn-primary-outline" onclick="insert()">新增</button>
-                </form>
-                <div class="card">
-                    <div class="card-block">
-                        <div class="card-title-block">
-                            <h3 class="title"> 后台用户列表 </h3>
-                        </div>
-                        <section class="example">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>用户名</th>
-                                    <th>等级权限</th>
-                                    <th>创建时间</th>
-                                    <th>修改时间</th>
-                                    <th>备注</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="manager,managerStat: ${managerList}">
-                                    <th th:text="${managerStat.index+1}" scope="row">1</th>
-                                    <td th:text="${manager.userName}">11</td>
-                                    <td th:text="${manager.level}">11</td>
-                                    <td th:text="${#dates.format(manager.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${#dates.format(manager.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
-                                    <td th:text="${manager.memo}">11</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </article>
 
         <div class="modal fade" id="modal-media">
             <div class="modal-dialog modal-lg">
@@ -425,16 +387,15 @@
     function insert(){
         var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
         var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
-        window.open('../user/editManager.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
+        window.open('../room/editRoom.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
 
-    function tf(orderNo,roomId) {
+    function qx(roomId) {
         jQuery.ajax({
             dataType:"text",
             type:"post",
-            url:"../order/quitRoom.do",
+            url:"../room/quitActive.do",
             data:{
-                orderNo:orderNo,
                 roomId:roomId
             },
             success:function (data) {
@@ -446,9 +407,37 @@
         });
     }
 
+</script>
 
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main1'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+            data:['销量']
+        },
+        xAxis: {
+            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20]
+        }]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
 </script>
 <script src="../js/vendor.js"></script>
 <script src="../js/app.js"></script>
+
 </body>
 </html>

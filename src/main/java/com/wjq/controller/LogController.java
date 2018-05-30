@@ -1,7 +1,6 @@
 package com.wjq.controller;
 
 import com.wjq.mapper.LogMapper;
-import com.wjq.model.Active;
 import com.wjq.model.Log;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiOperation;
@@ -45,5 +44,19 @@ public class LogController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入日志列表页面");
         logMapper.insert(log);
         return "/log";
+    }
+
+    @ApiOperation(value = "/图表页面",notes = "")
+    @RequestMapping(value = "/charts.htm")
+    public String charts(HttpServletRequest request, Model model){
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        return "/echarts";
     }
 }
