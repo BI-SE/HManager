@@ -138,4 +138,35 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAmountChat" resultType="com.wjq.model.RoomChart">
+
+    SELECT DATE_FORMAT(GMT_CREATE,'%Y-%m-%d') date,SUM(AMOUNT) amount FROM room_sub_order WHERE 1=1 GROUP BY DATE_FORMAT(GMT_CREATE,'%Y-%m-%d')
+    ORDER BY GMT_MODIFIED DESC
+
+  </select>
+
+  <select id="selectByorderId" resultMap="BaseResultMap">
+
+   SELECT
+    room_sub_order.ID,
+    room_sub_order.ORDER_ID,
+    room_sub_order.SUB_ORDER_ID,
+    room_sub_order.TYPE,
+    room_sub_order.AMOUNT,
+    room_sub_order.PAY_STATUS,
+    room_sub_order.GMT_CREATE,
+    room_sub_order.GMT_MODIFIED,
+    room_sub_order.MEMO
+  FROM
+    room_sub_order  WHERE 1 =1
+
+    <if test="orderId != null and orderId != ''" >
+      and  room_sub_order.ORDER_ID = #{orderId}
+    </if>
+
+
+  </select>
+
+
 </mapper>

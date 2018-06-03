@@ -1,6 +1,6 @@
 package com.wjq.controller;
 
-import com.wjq.mapper.LogMapper;
+import com.wjq.mapper.*;
 import com.wjq.model.Log;
 import com.wjq.model.Manager;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +23,18 @@ public class LogController {
 
     @Autowired
     private LogMapper logMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private RoomMapper roomMapper;
+
+    @Autowired
+    private RoomOrderMapper roomOrderMapper;
+
+    @Autowired
+    private RoomSubOrderMapper roomSubOrderMapper;
 
     @ApiOperation(value = "/日志列表",notes = "")
     @RequestMapping(value = "/log.htm")
@@ -56,6 +68,23 @@ public class LogController {
         if(null==managerDO||"".equals(managerDO.getLevel())){
             return "/login";
         }
+        List userChats = userMapper.selectUserChat();
+        model.addAttribute("userChats",userChats);
+
+        List roomChats = roomMapper.selectRoomChat();
+        model.addAttribute("roomChats",roomChats);
+
+        List orderChats = roomOrderMapper.selectOrderChat();
+        model.addAttribute("orderChats",orderChats);
+
+        List amountChats = roomSubOrderMapper.selectAmountChat();
+        model.addAttribute("amountChats",amountChats);
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入图表页面");
+        logMapper.insert(log);
 
         return "/echarts";
     }

@@ -53,15 +53,21 @@
     function addRoom(){
 
         jQuery.ajax({
-            dataType:'text',
+            dataType:'json',
             type:'post',
             async:false,
             url:"../room/addRoom.do",
             data:$('#form1').serialize(),
             success:function(data){
-                alert(data);
-                window.opener.location.href = window.opener.location.href;
-                window.close();
+
+                if(data.bizSucc){
+                    window.opener.location.href = window.opener.location.href;
+                    window.close();
+                }else{
+                    alert(data.msg);
+                }
+
+
             },
 
             error : function(data) {

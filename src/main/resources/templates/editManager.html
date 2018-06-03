@@ -50,15 +50,20 @@
     function addManager(){
 
         jQuery.ajax({
-            dataType:'text',
+            dataType:'json',
             type:'post',
             async:false,
             url:"../user/addManager.do",
             data:$('#form1').serialize(),
             success:function(data){
-                alert(data);
-                window.opener.location.href = window.opener.location.href;
-                window.close();
+                if(data.bizSucc){
+                    alert(data);
+                    window.opener.location.href = window.opener.location.href;
+                    window.close();
+                }else{
+                    alert(data.msg);
+                }
+
             },
 
             error : function(data) {

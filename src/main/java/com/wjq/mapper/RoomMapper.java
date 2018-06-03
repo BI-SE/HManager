@@ -30,4 +30,6 @@ public interface RoomMapper {
 
     List selectAll(@Param(value = "status") String status,@Param(value = "roomType")
             String roomType,@Param(value = "roomName") String roomName);
+
+    List selectRoomChat();
 }

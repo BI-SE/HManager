@@ -5,6 +5,7 @@ import com.wjq.mapper.LogMapper;
 import com.wjq.model.Active;
 import com.wjq.model.Log;
 import com.wjq.model.Manager;
+import com.wjq.model.Result;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,23 +126,27 @@ public class ActiveController {
 
 
         if(activeName==null||"".equals(activeName)){
-            throw new  RuntimeException("活动名称不能为空");
+            return  new Result(false,"活动名称不能为空");
         }
 
         if(activeType==null||"".equals(activeType)){
-            throw new  RuntimeException("活动类型不能为空");
+
+            return  new Result(false,"活动类型不能为空");
         }
 
         if(activePrice==null||"".equals(activePrice)){
-            throw new  RuntimeException("活动价格不能为空");
+
+            return  new Result(false,"活动价格不能为空");
         }
 
         if(activeStartDate==null||"".equals(activeStartDate)){
-            throw new  RuntimeException("开始时间不能为空");
+
+            return  new Result(false,"开始时间不能为空");
         }
 
         if(activeEndDate==null||"".equals(activeEndDate)){
-            throw new  RuntimeException("结束时间不能为空");
+
+            return  new Result(false,"结束时间不能为空");
         }
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -151,7 +156,8 @@ public class ActiveController {
              startDate =df.parse(activeStartDate);
              endDate =df.parse(activeEndDate);
         }catch (Exception e){
-            throw  new RuntimeException("时间格式转化失败");
+
+            return  new Result(false,"时间格式转化失败");
         }
 
         Active active = new Active();
@@ -177,7 +183,7 @@ public class ActiveController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增"+activeName+"活动");
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
     }
 
     @ApiOperation(value = "取消活动", notes = "")
@@ -188,7 +194,8 @@ public class ActiveController {
         String activeId = request.getParameter("activeId");
 
         if(activeId==null||"".equals(activeId)){
-            throw new  RuntimeException("活动id不能为空");
+
+            return  new Result(false,"活动id不能为空");
         }
 
         Active active = new  Active();
@@ -202,7 +209,7 @@ public class ActiveController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"取消"+active.getActiveName()+"活动");
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
     }
 
 

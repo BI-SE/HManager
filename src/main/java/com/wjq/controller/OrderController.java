@@ -3,8 +3,11 @@ package com.wjq.controller;
 import com.wjq.mapper.LogMapper;
 import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.RoomOrderMapper;
+import com.wjq.mapper.RoomSubOrderMapper;
 import com.wjq.model.Log;
 import com.wjq.model.Manager;
+import com.wjq.model.Result;
+import com.wjq.model.RoomSubOrder;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +37,9 @@ public class OrderController {
 
     @Autowired
     private LogMapper logMapper;
+
+    @Autowired
+    private RoomSubOrderMapper roomSubOrderMapper;
 
     @ApiOperation(value = "订单列表页面",notes = "")
     @RequestMapping("/orderList.htm")
@@ -69,17 +75,19 @@ public class OrderController {
     @ApiOperation(value = "退房",notes = "")
     @RequestMapping("/quitRoom.do")
     @ResponseBody
-    public String quitRoom(HttpServletRequest request){
+    public Object quitRoom(HttpServletRequest request){
 
         String orderNo = request.getParameter("orderNo");
         String roomId = request.getParameter("roomId");
 
         if(orderNo==null||"".equals(orderNo)){
-            throw new  RuntimeException("订单号不能为空");
+
+            return  new Result(false,"订单号不能为空");
         }
 
         if(roomId==null||"".equals(roomId)){
-            throw new  RuntimeException("房间号不能为空");
+
+            return  new Result(false,"房间号不能为空");
         }
 
 
@@ -92,6 +100,35 @@ public class OrderController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"退"+roomId+"房间");
         logMapper.insert(log);
 
-        return  "successr";
+        return  new Result(true,"成功");
+    }
+
+    @ApiOperation(value = "订单列表页面",notes = "")
+    @RequestMapping("/subOrderList.htm")
+    public String subOrderList(HttpServletRequest request,Model model){
+
+        String orderId = request.getParameter("orderId");
+        RoomSubOrder roomSubOrder = new RoomSubOrder();
+        roomSubOrder.setOrderId(orderId);
+
+        List orderList = roomSubOrderMapper.selectByorderId(roomSubOrder);
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        model.addAttribute("orderList",orderList);
+
+        model.addAttribute("orderId",orderId);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入订单列表页面");
+        logMapper.insert(log);
+
+        return  "/subOrder";
     }
 }

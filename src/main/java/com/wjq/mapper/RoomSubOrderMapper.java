@@ -3,6 +3,8 @@ package com.wjq.mapper;
 import com.wjq.model.RoomSubOrder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component("/roomSubOrderMapper")
 public interface RoomSubOrderMapper {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +18,8 @@ public interface RoomSubOrderMapper {
     int updateByPrimaryKeySelective(RoomSubOrder record);
 
     int updateByPrimaryKey(RoomSubOrder record);
+
+    List selectByorderId(RoomSubOrder record);
+
+    List selectAmountChat();
 }

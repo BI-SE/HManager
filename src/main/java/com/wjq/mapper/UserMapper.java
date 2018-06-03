@@ -23,4 +23,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     List selectList(@Param(value = "userName") String userName,@Param(value = "cell") String cell,@Param(value = "certNo") String certNo);
+
+    List selectUserChat();
 }

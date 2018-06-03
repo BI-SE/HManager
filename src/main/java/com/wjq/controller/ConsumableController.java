@@ -97,19 +97,23 @@ public class ConsumableController {
         String status = request.getParameter("status");
 
         if(roomId==null||"".equals(roomId)){
-            throw new  RuntimeException("房间id不能为空");
+
+            return  new Result(false,"房间id不能为空");
         }
 
         if(name==null||"".equals(name)){
-            throw new  RuntimeException("名称不能为空");
+
+            return  new Result(false,"名称不能为空");
         }
 
         if(price==null||"".equals(price)){
-            throw new  RuntimeException("价格不能为空");
+
+            return  new Result(false,"价格不能为空");
         }
 
         if(status==null||"".equals(status)){
-            throw new  RuntimeException("状态不能为空");
+
+            return  new Result(false,"状态不能为空");
         }
 
         RoomConsumables roomConsumables = new RoomConsumables();
@@ -128,7 +132,7 @@ public class ConsumableController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增消耗品"+name);
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
     }
 
     @ApiOperation(value = "使用", notes = "")
@@ -140,23 +144,31 @@ public class ConsumableController {
 
 
         if(id==null||"".equals(id)){
-            throw new  RuntimeException("id不能为空");
+
+            return  new Result(false,"d不能为空");
         }
 
       RoomConsumables roomConsumables =  roomConsumablesMapper.selectByPrimaryKey(Long.parseLong(id));
+
+        if(!roomConsumables.getStatus().equals("1")){
+            return  new Result(false,"已使用");
+        }
 
 
     Room room =roomMapper.selectByRoomId(roomConsumables.getRoomId());
 
     if(null==room||"0".equals(room.getStatus())){
-        throw  new RuntimeException("房间没有使用");
+
+        return  new Result(false,"房间处于空闲状态");
     }
 
     RoomOrder roomOrder =roomOrderMapper.selectBRoomId(roomConsumables.getRoomId());
 
         if(null==roomOrder){
-            throw  new RuntimeException("房间没有使用");
+            return  new Result(false,"房间没有使用");
+
         }
+
 
         //插入子订单
         RoomSubOrder roomSubOrder = new RoomSubOrder();
@@ -177,7 +189,7 @@ public class ConsumableController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"使用消耗品"+roomConsumables.getName());
         logMapper.insert(log);
 
-        return "success";
+        return new Result(false,"使用成功");
     }
 
 

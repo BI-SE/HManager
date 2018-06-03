@@ -85,7 +85,7 @@
                 var userPassword = $("#userPassword").val();
 
                 jQuery.ajax({
-                   dataType:"text",
+                   dataType:"json",
                     type:"post",
                     url:"../user/login.do",
                     data:{
@@ -93,7 +93,13 @@
                         userPassword:userPassword
                     },
                     success:function (data) {
-                        window.location.href="../user/index.htm";
+                       if(data.bizSucc){
+                           window.location.href="../user/index.htm";
+                       }else
+                       {
+                           alert(data.msg);
+                       }
+
                     },
                     error:function (data) {
                         alert(data);

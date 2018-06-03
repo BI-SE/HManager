@@ -9,7 +9,8 @@
     <link rel="apple-touch-icon" href="../apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
     <link rel="stylesheet" href="../css/vendor.css">
-
+    <link rel="stylesheet" href="../css/app.css">
+    <script src="../js/echarts.js"/>
     <!-- Theme initialization -->
     <script>
         var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
@@ -24,95 +25,11 @@
             document.write('<link rel="stylesheet" id="theme-style" href="../css/app.css">');
         }
     </script>
-    <script src="../js/echarts.js"/>
+
 </head>
 <body>
 <div class="main-wrapper">
     <div class="app" id="app">
-        <header class="header">
-            <div class="header-block header-block-collapse d-lg-none d-xl-none">
-                <button class="collapse-btn" id="sidebar-collapse-btn">
-                    <i class="fa fa-bars"></i>
-                </button>
-            </div>
-            <div class="header-block header-block-nav">
-                <ul class="nav-profile">
-                    <li class="notifications new">
-                        <a href="" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <sup>
-                                <span class="counter">8</span>
-                            </sup>
-                        </a>
-                        <div class="dropdown-menu notifications-dropdown-menu">
-                            <ul class="notifications-container">
-                                <li>
-                                    <a href="" class="notification-item">
-                                        <div class="img-col">
-                                            <div class="img" style="background-image: url('assets/faces/3.jpg')"></div>
-                                        </div>
-                                        <div class="body-col">
-                                            <p>
-                                                <span class="accent">Zack Alien</span> pushed new commit:
-                                                <span class="accent">Fix page load performance issue</span>. </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="" class="notification-item">
-                                        <div class="img-col">
-                                            <div class="img" style="background-image: url('assets/faces/5.jpg')"></div>
-                                        </div>
-                                        <div class="body-col">
-                                            <p>
-                                                <span class="accent">Amaya Hatsumi</span> started new task:
-                                                <span class="accent">Dashboard UI design.</span>. </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="" class="notification-item">
-                                        <div class="img-col">
-                                            <div class="img" style="background-image: url('assets/faces/8.jpg')"></div>
-                                        </div>
-                                        <div class="body-col">
-                                            <p>
-                                                <span class="accent">Andy Nouman</span> deployed new version of
-                                                <span class="accent">NodeJS REST Api V3</span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                            <footer>
-                                <ul>
-                                    <li>
-                                        <a href=""> View All </a>
-                                    </li>
-                                </ul>
-                            </footer>
-                        </div>
-                    </li>
-                    <li class="profile dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            <div class="img" style="background-image: url('https://avatars3.githubusercontent.com/u/3959008?v=3&s=40')"> </div>
-                            <span class="name"> John Doe </span>
-                        </a>
-                        <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-user icon"></i> Profile </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-bell icon"></i> Notifications </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-gear icon"></i> Settings </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login.html">
-                                <i class="fa fa-power-off icon"></i> Logout </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header>
         <aside class="sidebar">
             <div class="sidebar-container">
                 <div class="sidebar-header">
@@ -123,7 +40,7 @@
                             <span class="l l3"></span>
                             <span class="l l4"></span>
                             <span class="l l5"></span>
-                        </div> Modular Admin </div>
+                        </div> 酒店管理系统 </div>
                 </div>
                 <nav class="menu">
                     <ul th:if="${manager.level} le 5" class="sidebar-menu metismenu" id="sidebar-menu">
@@ -143,6 +60,12 @@
                         <li >
                             <a href="../order/orderList.htm">
                                 <i class="fa fa-home"></i> 订单 </a>
+                        </li>
+                    </ul>
+                    <ul th:if="${manager.level} eq 3 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
+                        <li >
+                            <a href="../order/subOrderList.htm">
+                                <i class="fa fa-home"></i> 子订单 </a>
                         </li>
                     </ul>
                     <ul th:if="${manager.level} eq 2 or ${manager.level} eq 0" class="sidebar-menu metismenu" id="sidebar-menu">
@@ -281,7 +204,18 @@
             </footer>
         </aside>
         <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+        <div style="float:left;margin-right:20px;margin-top:60px;">
         <div id="main1" style="width: 600px;height:400px;"></div>
+        </div>
+        <div style="float:left;margin-right:20px;margin-top:60px;">
+        <div id="main2" style="width: 600px;height:400px;"></div>
+        </div>
+        <div style="float:left;margin-right:20px;">
+        <div id="main3" style="width: 600px;height:400px;"></div>
+        </div>
+        <div style="float:left;margin-right:20px;">
+        <div id="main4" style="width: 600px;height:400px;"></div>
+        </div>
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
         <div class="sidebar-mobile-menu-handle" id="sidebar-mobile-menu-handle"></div>
         <div class="mobile-menu-handle"></div>
@@ -409,32 +343,134 @@
 
 </script>
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+
+    var userChats = [[${userChats}]];
+    var roomChats = [[${roomChats}]];
+    var orderChats = [[${orderChats}]];
+    var amountChats = [[${amountChats}]];
+
+    var userDateCharts =[];
+    var userCountCharts=[];
+    var roomDateCharts=[];
+    var roomCountCharts=[];
+    var orderDateCharts=[];
+    var orderCountCharts=[];
+    var amountDateCharts=[];
+    var amountCharts=[];
+
+    for(var i=0;i<userChats.length;i++){
+        userDateCharts.push(userChats[i].date);
+        userCountCharts.push(userChats[i].count);
+    }
+    for(var i=0;i<roomChats.length;i++){
+        roomDateCharts.push(roomChats[i].date);
+        roomCountCharts.push(roomChats[i].count);
+    }
+    for(var i=0;i<orderChats.length;i++){
+        orderDateCharts.push(orderChats[i].date);
+        orderCountCharts.push(orderChats[i].count);
+    }
+    for(var i=0;i<amountChats.length;i++){
+        amountDateCharts.push(amountChats[i].date);
+        amountCharts.push(amountChats[i].amount);
+    }
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main1'));
+    var myChart1 = echarts.init(document.getElementById('main2'));
+    var myChart2 = echarts.init(document.getElementById('main3'));
+    var myChart3 = echarts.init(document.getElementById('main4'));
 
     // 指定图表的配置项和数据
     var option = {
         title: {
-            text: 'ECharts 入门示例'
+            text: '每日登记用户数'
         },
         tooltip: {},
         legend: {
-            data:['销量']
+            data:['用户数']
         },
         xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            data: userDateCharts
         },
         yAxis: {},
         series: [{
-            name: '销量',
+            name: '用户数',
             type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
+            data: userCountCharts
+        }]
+    };
+
+
+    // 指定图表的配置项和数据
+    var option1 = {
+        title: {
+            text: '每日房间数'
+        },
+        tooltip: {},
+        legend: {
+            data:['房间数']
+        },
+        xAxis: {
+            data: roomDateCharts
+        },
+        yAxis: {},
+        series: [{
+            name: '房间数',
+            type: 'bar',
+            data: roomCountCharts
+        }]
+    };
+
+
+
+
+    // 指定图表的配置项和数据
+    var option2 = {
+        title: {
+            text: '每日营业额'
+        },
+        tooltip: {},
+        legend: {
+            data:['营业额']
+        },
+        xAxis: {
+            data: orderDateCharts
+        },
+        yAxis: {},
+        series: [{
+            name: '营业额',
+            type: 'bar',
+            data: orderCountCharts
+        }]
+    };
+
+
+    // 指定图表的配置项和数据
+    var option3 = {
+        title: {
+            text: '每日订单数'
+        },
+        tooltip: {},
+        legend: {
+            data:['订单数']
+        },
+        xAxis: {
+            data: amountDateCharts
+        },
+        yAxis: {},
+        series: [{
+            name: '订单数',
+            type: 'bar',
+            data: amountCharts
         }]
     };
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+    myChart3.setOption(option3);
 </script>
 <script src="../js/vendor.js"></script>
 <script src="../js/app.js"></script>

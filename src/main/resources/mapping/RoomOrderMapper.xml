@@ -209,6 +209,11 @@
       room_order WHERE room_order.ROOM_ID=#{roomId} ORDER BY GMT_MODIFIED DESC LIMIT 1
   </select>
 
+  <select id="selectOrderChat" resultType="com.wjq.model.UserChat">
 
+    SELECT DATE_FORMAT(GMT_CREATE,'%Y-%m-%d') date,count(0) count FROM room_order WHERE 1=1 GROUP BY DATE_FORMAT(GMT_CREATE,'%Y-%m-%d')
+    ORDER BY GMT_MODIFIED DESC
+
+  </select>
 
 </mapper>

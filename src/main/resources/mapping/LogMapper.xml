@@ -113,6 +113,6 @@
         log.GMT_MODIFIED,
         log.MEMO
       FROM
-        log
+        log   ORDER BY GMT_MODIFIED DESC
   </select>
 </mapper>

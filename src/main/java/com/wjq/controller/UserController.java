@@ -6,6 +6,7 @@ import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.UserMapper;
 import com.wjq.model.Log;
 import com.wjq.model.Manager;
+import com.wjq.model.Result;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,27 +48,38 @@ public class UserController {
         return "/login";
     }
 
+    @ApiOperation(value = "退出",notes = "")
+    @RequestMapping(value = "/loginOut.htm",method =RequestMethod.GET)
+    public String loginOut(HttpServletRequest request,Model model){
+        request.getSession().setAttribute("manager",null);
+        return "/login";
+    }
+
     @ApiOperation(value = "登录")
     @ApiImplicitParam(name = "manager",value = "用户实体对象",required =true,dataType = "Manager")
     @RequestMapping(value ="/login.do",method = RequestMethod.POST)
     @ResponseBody
     public Object login(HttpServletRequest request,@ModelAttribute Manager manager, Model model){
         if(null==manager){
-            throw  new RuntimeException("请输入账号密码");
+
+            return  new Result(false,"请输入账号密码");
         }
 
         if(null==manager.getUserName()||"".equals(manager.getUserPassword())){
-            throw  new RuntimeException("请输入账号密码");
+
+            return  new Result(false,"请输入账号密码");
         }
 
         Manager managerDO =    managerMapper.selectByUserName(manager.getUserName());
 
         if(null==managerDO){
-            throw new RuntimeException("用户不存在，请确认账号!");
+
+            return  new Result(false,"用户不存在，请确认账号!");
         }
 
         if(!managerDO.getUserPassword().equals(manager.getUserPassword())){
-            throw  new RuntimeException("密码错误,请重新输入!");
+
+            return  new Result(false,"密码错误,请重新输入!");
         }
         model.addAttribute("manager",managerDO);
 
@@ -78,7 +90,7 @@ public class UserController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"登录");
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
 
     }
 
@@ -197,15 +209,18 @@ public class UserController {
         String level = request.getParameter("level");
 
         if(userName==null||"".equals(userName)){
-            throw new  RuntimeException("后台用户名称不能为空");
+
+            return  new Result(false,"后台用户名称不能为空");
         }
 
         if(userPassword==null||"".equals(userPassword)){
-            throw new  RuntimeException("密码不能为空");
+
+            return  new Result(false,"密码不能为空");
         }
 
         if(level==null||"".equals(level)){
-            throw new  RuntimeException("权限等级不能为空");
+
+            return  new Result(false,"权限等级不能为空");
         }
 
         Manager manager = new Manager();
@@ -223,7 +238,7 @@ public class UserController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增后台用户"+userName+"权限为"+level);
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
     }
 
 }

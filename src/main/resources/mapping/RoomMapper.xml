@@ -231,4 +231,11 @@
     WHERE  ROOM_ID = #{roomId}
   </update>
 
+  <select id="selectRoomChat" resultType="com.wjq.model.UserChat">
+
+    SELECT DATE_FORMAT(GMT_CREATE,'%Y-%m-%d') date,count(0) count FROM room WHERE 1=1 GROUP BY DATE_FORMAT(GMT_CREATE,'%Y-%m-%d')
+    ORDER BY GMT_MODIFIED DESC
+
+  </select>
+
 </mapper>

@@ -29,4 +29,6 @@ public interface RoomOrderMapper {
 
     RoomOrder selectBRoomId(String roomId);
 
+    List selectOrderChat();
+
 }

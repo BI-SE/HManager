@@ -214,15 +214,18 @@ public class RoomController {
         String activeId = request.getParameter("activeId");
 
         if(roomName==null||"".equals(roomName)){
-            throw new  RuntimeException("用户名不能为空");
+
+            return  new Result(false,"用户名不能为空");
         }
 
         if(roomType==null||"".equals(roomType)){
-            throw new  RuntimeException("用户类型不能为空");
+
+            return  new Result(false,"用户类型不能为空");
         }
 
         if(price==null||"".equals(price)){
-            throw new  RuntimeException("价格不能为空");
+
+            return  new Result(false,"价格不能为空");
         }
 
         Room room = new Room();
@@ -243,7 +246,7 @@ public class RoomController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"新增"+roomName+"房间");
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
     }
 
 
@@ -255,7 +258,8 @@ public class RoomController {
         String roomId = request.getParameter("roomId");
 
         if(roomId==null||"".equals(roomId)){
-            throw new  RuntimeException("房间id不能为空");
+
+            return  new Result(false,"房间id不能为空");
         }
 
         roomMapper.updateActiveByRoomId(roomId);
@@ -266,7 +270,7 @@ public class RoomController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"取消"+roomId+"房间活动");
         logMapper.insert(log);
 
-        return "success";
+        return  new Result(true,"成功");
     }
 
 }

@@ -156,32 +156,41 @@
 
   <select id="selectList" resultMap="BaseResultMap">
 
-    SELECT
-      ID,
-      USER_ID,
-      NAME,
-      SEX,
-      CERT_NO,
-      CELL,
-      GMT_CREATE,
-      GMT_MODIFIED,
-      MEMO
-    FROM
-     user where 1=1
+  SELECT
+  ID,
+  USER_ID,
+  NAME,
+  SEX,
+  CERT_NO,
+  CELL,
+  GMT_CREATE,
+  GMT_MODIFIED,
+  MEMO
+  FROM
+  user where 1=1
 
-    <if test="userName != null and userName != ''" >
-      and NAME = #{userName}
-    </if>
-    <if test="cell != null and cell != ''" >
-      and CELL = #{cell}
-    </if>
+  <if test="userName != null and userName != ''" >
+    and NAME = #{userName}
+  </if>
+  <if test="cell != null and cell != ''" >
+    and CELL = #{cell}
+  </if>
 
-    <if test="certNo != null and certNo != ''" >
-      and CERT_NO = #{certNo}
-    </if>
+  <if test="certNo != null and certNo != ''" >
+    and CERT_NO = #{certNo}
+  </if>
 
+  ORDER BY GMT_MODIFIED DESC
+
+</select>
+
+  <select id="selectUserChat" resultType="com.wjq.model.UserChat">
+
+    SELECT DATE_FORMAT(GMT_CREATE,'%Y-%m-%d') date,count(0) count FROM user WHERE 1=1 GROUP BY DATE_FORMAT(GMT_CREATE,'%Y-%m-%d')
     ORDER BY GMT_MODIFIED DESC
 
   </select>
+
+
   
 </mapper>
