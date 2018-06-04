@@ -266,7 +266,7 @@
                                     <td th:text="${#dates.format(order.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${#dates.format(order.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${order.memo}">11</td>
-                                    <td><button th:if="${order.status} == '1'" type="button" class="btn btn-primary-outline" th:onclick="'javascript:tf(\''+${order.orderNo}+'\',\''+${order.roomId}+'\');'">退房</button></td>
+                                    <td><button th:if="${order.status} == '1'" type="button" class="btn btn-primary-outline" th:onclick="'javascript:quit(\''+${order.orderNo}+'\',\''+${order.roomId}+'\');'">退房</button></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -379,6 +379,12 @@
         var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
         window.open('../room/editRoom.htm', '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
     }
+    function quit(orderNo,roomId){
+        var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
+        window.open('../order/quitRoom.htm?orderNo='+orderNo+"&roomId="+roomId, '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
+    }
+
 
     function tf(orderNo,roomId) {
         jQuery.ajax({

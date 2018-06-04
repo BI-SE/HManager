@@ -257,7 +257,8 @@
                                                         <td th:text="${room.roomName}">11</td>
                                                         <td th:text="${room.roomType}">11</td>
                                                         <td th:text="${room.price}">11</td>
-                                                        <td th:text="${room.isActive}">11</td>
+                                                        <td th:if="${room.isActive} == '1'">参与活动</td>
+                                                        <td th:if="${room.isActive} == '0'">不参与</td>
                                                         <td th:if="${room.status} == '0'">空闲</td>
                                                         <td th:if="${room.status} == '1'">开房中</td>
                                                         <td th:text="${#dates.format(room.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>

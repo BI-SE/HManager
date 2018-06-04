@@ -164,9 +164,18 @@
     <if test="orderId != null and orderId != ''" >
       and  room_sub_order.ORDER_ID = #{orderId}
     </if>
+    ORDER BY GMT_MODIFIED DESC
 
 
   </select>
+
+  <update id="updateByOrderId">
+
+    update room_sub_order
+    SET  PAY_STATUS = "1",
+    GMT_MODIFIED = CURRENT_TIMESTAMP
+    WHERE ORDER_ID = #{orderId}
+  </update>
 
 
 </mapper>

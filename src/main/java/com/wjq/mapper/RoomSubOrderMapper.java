@@ -22,4 +22,6 @@ public interface RoomSubOrderMapper {
     List selectByorderId(RoomSubOrder record);
 
     List selectAmountChat();
+
+    int updateByOrderId(String orderId);
 }

@@ -43,7 +43,10 @@
                 <input name="price" type="text" class="form-control underlined"> </div>
             <div class="form-group">
                 <label class="control-label">活动</label>
-                <input name="activeId" type="text" class="form-control underlined"> </div>
+               <select name="activeId">
+                   <option value="0">请选择活动</option>
+                   <option  th:each="active:${activeList}" th:value="${active.activeId}" th:text="${active.activeName }"></option>
+               </select> </div>
             <button type="button" class="btn btn-primary-outline" onclick="addRoom()">完成</button>
         </form>
     </div>

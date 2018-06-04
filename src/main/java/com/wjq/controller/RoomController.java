@@ -193,6 +193,10 @@ public class RoomController {
             return "/login";
         }
 
+      List activeList =  activeMapper.selectList(new Active());
+
+        model.addAttribute("activeList",activeList);
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log log = new Log();
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入新增房间页面");

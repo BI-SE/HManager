@@ -266,7 +266,9 @@
                                     <td th:text="${consumable.roomId}">111</td>
                                     <td th:text="${consumable.name}">11</td>
                                     <td th:text="${consumable.price}">11</td>
-                                    <td th:text="${consumable.status}">11</td>
+                                    <td th:if="${consumable.status} == '0'">无效</td>
+                                    <td th:if="${consumable.status} == '1'">有效</td>
+                                    <td th:if="${consumable.status} == '2'">已使用</td>
                                     <td th:text="${#dates.format(consumable.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${#dates.format(consumable.gmtModified,'yyyy-MM-dd HH:mm:ss')}">11</td>
                                     <td th:text="${consumable.memo}">11</td>

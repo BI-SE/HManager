@@ -1,0 +1,133 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> ModularAdmin - Free Dashboard Theme | HTML Version </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="stylesheet" href="../css/vendor.css">
+    <!-- Theme initialization -->
+    <script>
+        var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
+            {};
+        var themeName = themeSettings.themeName || '';
+        if (themeName)
+        {
+            document.write('<link rel="stylesheet" id="theme-style" href="../css/app-' + themeName + '.css">');
+        }
+        else
+        {
+            document.write('<link rel="stylesheet" id="theme-style" href="../css/app.css">');
+        }
+    </script>
+    <script src="../js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="col-md-6">
+    <div class="card card-block sameheight-item">
+        <div class="title-block">
+            <h3 class="title"> 结账 </h3>
+        </div>
+        <form role="form" id="form1">
+
+            <div class="form-group" id="fjName">
+                <label class="control-label">房间名</label>
+                <input type="text" readonly="readonly" class="form-control underlined" th:value="${room.roomName}"> </div>
+            <div th:each="order,orderStat: ${orderList}">
+                <div class="form-group" >
+                    <label class="control-label" th:text="${order.type}">房间名</label>
+                    <input type="text" readonly="readonly" class="form-control underlined" th:value="${order.amount}"> </div>
+            </div>
+            <div class="form-group" >
+                <label class="control-label">总金额</label>
+                <input type="text" readonly="readonly" class="form-control underlined" th:value="${totalAmount}"> </div>
+            <button type="button" class="btn btn-primary-outline" onclick="tf()">结账</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+
+    function tf(orderNo,roomId) {
+
+        jQuery.ajax({
+            dataType:"json",
+            type:"post",
+            url:"../order/quitRoom.do",
+            data:{
+                orderNo:[[${orderNo}]],
+                roomId:[[${roomId}]]
+            },
+            success:function (data) {
+                if(data.bizSucc){
+                    window.opener.location.href = window.opener.location.href;
+                    window.close();
+                }else{
+                    alert(data.msg);
+                }
+
+            },
+            error:function (data) {
+                alert(data);
+            }
+        });
+    }
+
+    function conti(roomId){
+
+        var iTop = (window.screen.height-30-700)/2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.width-10-600)/2; //获得窗口的水平位置;
+
+        jQuery.ajax({
+            dataType:'text',
+            type:'post',
+            async:false,
+            url:"../room/signRoom.do",
+            data:$('#form1').serialize(),
+            success:function(date){
+
+                window.close();
+                window.open('../room/signRoom.htm?roomId='+roomId, '_blank', 'height=700, width=600, top='+iTop+', left='+iLeft+', toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no')
+
+            },
+
+            error : function(date) {
+                alert("异常！");
+            }
+        });
+    }
+
+    function finis(){
+
+        var ipt = document.createElement("input");
+        ipt.setAttribute("type","text");
+        ipt.setAttribute("name","flag");
+        ipt.setAttribute("hidden","hidden");
+        ipt.setAttribute("value","1");
+        var div = document.getElementById("fjName");
+        div.appendChild(ipt);
+
+        jQuery.ajax({
+            dataType:'json',
+            type:'post',
+            async:false,
+            url:"../room/signRoom.do",
+            data:$('#form1').serialize(),
+            success:function(date){
+                //window.opener.location.href = window.opener.location.href;
+                window.close();
+            },
+
+            error : function(date) {
+                alert("异常！");
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

@@ -4,10 +4,7 @@ import com.wjq.mapper.LogMapper;
 import com.wjq.mapper.RoomMapper;
 import com.wjq.mapper.RoomOrderMapper;
 import com.wjq.mapper.RoomSubOrderMapper;
-import com.wjq.model.Log;
-import com.wjq.model.Manager;
-import com.wjq.model.Result;
-import com.wjq.model.RoomSubOrder;
+import com.wjq.model.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -93,7 +91,7 @@ public class OrderController {
 
         roomMapper.updateStateByRoomId(roomId,"0");
         roomOrderMapper.updateStatusByOrderNo(orderNo,"2");
-
+        roomSubOrderMapper.updateByOrderId(orderNo);
         Manager managerDO = (Manager) request.getSession().getAttribute("manager");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log log = new Log();
@@ -126,9 +124,53 @@ public class OrderController {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log log = new Log();
-        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入订单列表页面");
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入子订单列表页面");
         logMapper.insert(log);
 
         return  "/subOrder";
     }
+
+    @ApiOperation(value = "结账", notes = "")
+    @RequestMapping(value = "quitRoom.htm")
+    public String quitRoom(HttpServletRequest request, Model model) {
+
+        String orderNo = request.getParameter("orderNo");
+
+        String roomId = request.getParameter("roomId");
+
+        Manager managerDO = (Manager) request.getSession().getAttribute("manager");
+        model.addAttribute("manager",managerDO);
+
+        if(null==managerDO||"".equals(managerDO.getLevel())){
+            return "/login";
+        }
+
+        RoomSubOrder roomSubOrder = new RoomSubOrder();
+        roomSubOrder.setOrderId(orderNo);
+
+        List<RoomSubOrder> orderList = roomSubOrderMapper.selectByorderId(roomSubOrder);
+
+        model.addAttribute("orderList",orderList);
+
+        BigDecimal totalAmount = new BigDecimal(0);
+        for(RoomSubOrder roomSubOrder1:orderList){
+            totalAmount = totalAmount.add(roomSubOrder1.getAmount());
+        }
+        model.addAttribute("totalAmount",totalAmount);
+
+        Room room = roomMapper.selectByRoomId(roomId);
+        model.addAttribute("room",room);
+
+        model.addAttribute("orderNo",orderNo);
+        model.addAttribute("roomId",roomId);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log log = new Log();
+        log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"进入结账页面");
+        logMapper.insert(log);
+
+        return "/quitRoom";
+    }
+
+
 }

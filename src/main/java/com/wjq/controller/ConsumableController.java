@@ -178,7 +178,7 @@ public class ConsumableController {
         roomSubOrder.setOrderId(roomOrder.getOrderNo());
         roomSubOrder.setPayStatus("0");
         roomSubOrder.setSubOrderId("sub"+System.currentTimeMillis());
-        roomSubOrder.setType("0");
+        roomSubOrder.setType(roomConsumables.getName());
         roomSubOrderMapper.insert(roomSubOrder);
 
         roomConsumablesMapper.updateStatusByRoomId("2",roomConsumables.getRoomId());
@@ -189,7 +189,7 @@ public class ConsumableController {
         log.setContent(managerDO.getUserName()+"于"+dateFormat.format(new Date())+"使用消耗品"+roomConsumables.getName());
         logMapper.insert(log);
 
-        return new Result(false,"使用成功");
+        return new Result(true,"使用成功");
     }
 
 
